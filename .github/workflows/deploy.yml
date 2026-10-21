@@ -32,7 +32,7 @@ jobs:
         run: node scripts/build.mjs
         env:
           SITE_URL: ${{ vars.SITE_URL }}
-          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
+          GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID || 'G-09WE1G90CT' }}
       - uses: actions/upload-artifact@v4
         with:
           name: dist
