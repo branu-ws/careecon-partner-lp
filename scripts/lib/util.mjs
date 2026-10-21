@@ -79,7 +79,7 @@ export async function exists(p) {
 
 /** 公開物としてコピーする拡張子（ビルド用ファイルや README は含めない） */
 const PUBLIC_EXT = new Set(['.html', '.js', '.css', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.txt', '.xml', '.json', '.woff2']);
-const PUBLIC_NAMES = new Set(['.nojekyll', 'CNAME']);
+const PUBLIC_NAMES = new Set(['.nojekyll', 'CNAME', '_headers']);
 
 /** リポジトリ直下の公開ファイルを dist にコピーする */
 export async function copyPublicFiles(srcDir, distDir) {

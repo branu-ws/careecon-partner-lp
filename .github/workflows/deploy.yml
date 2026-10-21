@@ -33,22 +33,25 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL }}
           GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
+          name: dist
           path: dist
 
   deploy:
-    # リポジトリ変数 ACTIONS_DEPLOY が 'true' で、PR以外のときだけ公開する
-    # （Pagesの公開元を「GitHub Actions」に切り替えてから true にする）
-    if: ${{ vars.ACTIONS_DEPLOY == 'true' && github.event_name != 'pull_request' }}
+    # Cloudflare Pages に公開する。リポジトリ変数 CLOUDFLARE_PAGES_PROJECT が設定済みで、PR以外のときだけ動く
+    # 事前に Secrets へ CLOUDFLARE_API_TOKEN（権限: Cloudflare Pages の編集）と CLOUDFLARE_ACCOUNT_ID を登録する
+    # main は本番、それ以外のブランチ（手動実行時）はプレビューとして公開される
+    if: ${{ vars.CLOUDFLARE_PAGES_PROJECT != '' && github.event_name != 'pull_request' }}
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }} --branch=${{ github.ref_name }} --commit-hash=${{ github.sha }}

@@ -4,8 +4,8 @@ import { gaTag, JUICER_TAG } from './tracking.mjs';
 
 export const SITE_NAME = 'CAREECON+ パートナープログラム';
 const ORG = { '@type': 'Organization', name: 'BRANU, Inc.', url: 'https://branu.jp/' };
-// 独自ドメイン（SITE_URL）が未設定のときの、画像URL用の仮の基準URL（og:image は絶対URLが必要なため）
-export const FALLBACK_BASE = 'https://naoki0715.github.io/partner';
+// SITE_URL が未設定のときの、画像URL用の基準URL（og:image は絶対URLが必要なため）。本番URLにしておく
+export const FALLBACK_BASE = 'https://partner.careecon-plus.com';
 
 /** 絶対URL（SITE_URL が無ければ空） */
 export function absUrl(site, rel) {

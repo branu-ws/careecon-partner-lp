@@ -1,4 +1,4 @@
-// サイト全体のビルド。出力先は dist/（GitHub Pages にはこの中身を公開する）
+// サイト全体のビルド。出力先は dist/（Cloudflare Pages にはこの中身を公開する）
 //
 //   1. 公開ファイル（HTML/JS/CSS/画像）を dist にコピー
 //   2. content/blog/*.md の記事から、ブログの一覧・記事ページ・画像を生成

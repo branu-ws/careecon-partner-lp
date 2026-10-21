@@ -1,6 +1,6 @@
 # CAREECON+ パートナー募集LP
 
-静的LP（index.html）＋ Markdown で書くブログを、ビルドして GitHub Pages に公開します。
+静的LP（index.html）＋ Markdown で書くブログを、ビルドして Cloudflare Pages（https://partner.careecon-plus.com）に公開します。
 
 ## 構成
 - index.html / support.js / image-slot.js / assets 一式 … LP本体（編集は index.html）
@@ -9,6 +9,7 @@
 - blog.css … ブログのスタイル
 - scripts/ … ビルド（記事→HTML、LPのプリレンダリング、sitemap/robots/RSS生成）とテスト
 - .github/workflows/deploy.yml … ビルド＆公開（push・毎時・手動）
+- _headers … Cloudflare Pages の応答ヘッダー（pages.dev を検索に載せない設定）
 
 ## ブログ記事の書き方
 1. `content/blog/_template.md` をコピーして、`content/blog/好きな名前.md` を作る（ファイル名は半角英数とハイフン推奨。`slug` を省略するとこの名前が記事URLになる）
@@ -35,11 +36,16 @@
 - GitHub の画面で Markdown を編集・画像をアップロードすれば、パソコンにツールは不要です（Add file → Create new file / Upload files）
 
 ## 公開までの設定（初回のみ）
-1. Settings > Pages > Source を「GitHub Actions」に変更
-2. Settings > Secrets and variables > Actions > Variables に以下を追加
-   - `SITE_URL` … 公開URL（例 https://partner.careecon-plus.com）。canonical・sitemap・RSS に使う
-   - `GA_MEASUREMENT_ID` … 公開後に取得したGA4の測定ID（G-XXXXXXXXXX）
-   - `ACTIONS_DEPLOY` = `true` … これで Actions からの公開が有効になる
+1. Cloudflare で Pages プロジェクトを作成する（Git連携ではなく Direct Upload。ビルドは GitHub Actions で行う）
+2. Cloudflare で API トークンを発行する（権限: アカウント > Cloudflare Pages > 編集）
+3. Settings > Secrets and variables > Actions > Secrets に以下を追加
+   - `CLOUDFLARE_API_TOKEN` … 2 のトークン
+   - `CLOUDFLARE_ACCOUNT_ID` … Cloudflare のアカウントID
+4. 同じ画面の Variables に以下を追加
+   - `SITE_URL` … 公開URL（https://partner.careecon-plus.com）。canonical・sitemap・RSS に使う
+   - `CLOUDFLARE_PAGES_PROJECT` … 1 のプロジェクト名。これで Actions からの公開が有効になる
+   - `GA_MEASUREMENT_ID` … 公開後に取得したGA4の測定ID（G-XXXXXXXXXX）。追加したら Actions を手動実行して反映
+5. Cloudflare の Pages プロジェクトの Custom domains に `partner.careecon-plus.com` を追加
 
 ## ローカルでの確認
 ```
