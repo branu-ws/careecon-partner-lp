@@ -44,9 +44,9 @@ html{-webkit-text-size-adjust:100%}body{overflow-wrap:break-word}.nav-right{gap:
 @media(max-width:620px){html{scroll-padding-top:100px}}
 
 /* ---- 2026-10 design integration additions ---- */
-/* 資料請求ボタン（ヘッダー）：ブランドのオレンジ */
-.topbar .nav-right .btn{background:#fc8b00;color:var(--navy)}
-.topbar .nav-right .btn:hover{background:#e87d00}
+/* 資料請求ボタン（ヘッダー）：旧デザインのCTAカラー */
+.topbar .nav-right .btn{background:#ffce2c;color:var(--navy)}
+.topbar .nav-right .btn:hover{background:#f2bf10}
 /* 市場のギャップ */
 .market-gap{display:grid;gap:8px;margin:0 0 28px;padding:22px 26px;border:1px solid #ffffff40;border-radius:10px;background:#ffffff14;color:#fff}
 .market-gap-label{font:800 12px Manrope,var(--font-body);letter-spacing:.1em;color:#bed0ff}
