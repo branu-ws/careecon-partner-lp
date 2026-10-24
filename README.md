@@ -3,13 +3,16 @@
 静的LP（index.html）＋ Markdown で書くブログを、ビルドして Cloudflare Pages（https://partner.careecon-plus.com）に公開します。
 
 ## 構成
-- index.html / support.js / image-slot.js / assets 一式 … LP本体（編集は index.html）
-- form-submit.js … Googleフォーム連携・プライバシー同意チェック
-- content/blog/ … **ブログ記事（Markdown）と画像**
-- blog.css … ブログのスタイル
-- scripts/ … ビルド（記事→HTML、LPのプリレンダリング、sitemap/robots/RSS生成）とテスト
+- index.html … LP本体（完成形のHTML。編集は index.html と assets/css/style.css）
+- assets/ … 画像・CSS（style.css＝LPとブログ共通、guide.css＝ガイド一覧・記事）・JS（main.js＝メニュー等、form-submit.js＝Googleフォーム連携・プライバシー同意）・フォント
+- content/blog/ … **ガイド記事（Markdown）と画像**
+- content/pages/ … 固定ページ（プライバシーポリシー → https://partner.careecon-plus.com/privacy/）
+- scripts/ … ビルド（記事→HTML、sitemap/robots/RSS生成）とテスト。ヘッダー・フッターは scripts/lib/templates.mjs（LPと同じ内容）
 - .github/workflows/deploy.yml … ビルド＆公開（push・毎時・手動）
 - _headers … Cloudflare Pages の応答ヘッダー（pages.dev を検索に載せない設定）
+
+LPのヘッダー・フッター・ナビを変えるときは、index.html と scripts/lib/templates.mjs の両方を直してください。
+プライバシーポリシーのURLは全ページ・フォームとも https://partner.careecon-plus.com/privacy/ です。
 
 ## ブログ記事の書き方
 1. `content/blog/_template.md` をコピーして、`content/blog/好きな名前.md` を作る（ファイル名は半角英数とハイフン推奨。`slug` を省略するとこの名前が記事URLになる）

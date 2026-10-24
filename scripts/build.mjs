@@ -163,6 +163,8 @@ export async function main({ env = process.env, log = console } = {}) {
   // 4. プリレンダリング
   if (env.SKIP_PRERENDER === '1') {
     log.warn('4. プリレンダリング: SKIP_PRERENDER=1 のため省略');
+  } else if (!/<x-dc>/.test(await fs.readFile(indexPath, 'utf8'))) {
+    log.log('4. プリレンダリング: LPは完成形のHTMLのため不要（省略）');
   } else {
     const r = await prerenderLanding(distDir);
     log.log(`4. LPをプリレンダリング: 完成形 ${Math.round(r.bytes / 1024)}KB / 本文 ${r.text}文字`);
