@@ -187,7 +187,7 @@ test('buildPages: プライバシーポリシーを /privacy/ に生成し、Jui
   assert.match(html, /href="https:\/\/juicer\.cc\/privacy\/"/);
   assert.match(html, /kitchen\.juicer\.cc/, 'Juicerタグが入る');
   assert.match(html, /rel="canonical" href="https:\/\/x\.example\/privacy\/"/);
-  assert.match(html, /<a href="\.\.\/privacy\/">プライバシーポリシー<\/a>/);
+  assert.match(html, /<a href="https:\/\/partner\.careecon-plus\.com\/privacy\/"[^>]*>プライバシーポリシー/);
   assert.doesNotMatch(html, /email protected|\[email/);
   assert.match(buildSitemap({ siteUrl: 'https://x.example', articles: [], pages }), /https:\/\/x\.example\/privacy\//);
 });

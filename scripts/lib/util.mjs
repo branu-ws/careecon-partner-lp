@@ -80,12 +80,19 @@ export async function exists(p) {
 /** 公開物としてコピーする拡張子（ビルド用ファイルや README は含めない） */
 const PUBLIC_EXT = new Set(['.html', '.js', '.css', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.txt', '.xml', '.json', '.woff2']);
 const PUBLIC_NAMES = new Set(['.nojekyll', 'CNAME', '_headers']);
+/** フォルダごとコピーする公開物（画像・CSS・JS・フォント） */
+const PUBLIC_DIRS = new Set(['assets']);
 
 /** リポジトリ直下の公開ファイルを dist にコピーする */
 export async function copyPublicFiles(srcDir, distDir) {
   await fs.mkdir(distDir, { recursive: true });
   const copied = [];
   for (const entry of await fs.readdir(srcDir, { withFileTypes: true })) {
+    if (entry.isDirectory() && PUBLIC_DIRS.has(entry.name)) {
+      await fs.cp(path.join(srcDir, entry.name), path.join(distDir, entry.name), { recursive: true });
+      copied.push(entry.name + '/');
+      continue;
+    }
     if (!entry.isFile()) continue;
     const ext = path.extname(entry.name).toLowerCase();
     if (!PUBLIC_EXT.has(ext) && !PUBLIC_NAMES.has(entry.name)) continue;

@@ -1,8 +1,10 @@
-// ブログのHTMLテンプレート（一覧・記事）。LPと同じロゴ・色・フォント・フッターを使う。
+// ブログのHTMLテンプレート（一覧・記事・固定ページ）。LPと同じヘッダー・フッター・CSSを使う。
 import { esc, jaDate, jsonForScript, truncate, ymdJst } from './util.mjs';
 import { gaTag, JUICER_TAG } from './tracking.mjs';
 
-export const SITE_NAME = 'CAREECON+ パートナープログラム';
+export const SITE_NAME = 'CAREECON Plus 販売パートナープログラム';
+// プライバシーポリシー（全ページ・フォーム共通。固定ページ content/pages/privacy.md から /privacy/ に生成される）
+export const PRIVACY_URL = 'https://partner.careecon-plus.com/privacy/';
 const ORG = { '@type': 'Organization', name: 'BRANU, Inc.', url: 'https://branu.jp/' };
 // SITE_URL が未設定のときの、画像URL用の基準URL（og:image は絶対URLが必要なため）。本番URLにしておく
 export const FALLBACK_BASE = 'https://partner.careecon-plus.com';
@@ -16,6 +18,26 @@ export function imageUrl(site, rel) {
   return `${site.siteUrl || FALLBACK_BASE}/${rel}`;
 }
 
+const NAV = [
+  ['product', 'プロダクト'],
+  ['customer-results', '導入事例'],
+  ['model', '提携モデル'],
+  ['partners', '対象企業'],
+  ['partner-guide', '検討ガイド'],
+  ['support', 'サポート'],
+  ['getting-started', '開始の流れ'],
+  ['faq', 'よくある質問'],
+];
+
+function siteHeader(rootRel) {
+  const links = (cls = '') => NAV.map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('');
+  return `<header class="topbar"><div class="wrap nav"><a aria-label="CAREECON Plus 販売パートナープログラム" class="brand" href="${rootRel}#top"><img alt="CAREECON Plus" src="${rootRel}assets/images/careeconplus_logo.png" width="2048" height="375"><span>販売パートナープログラム</span></a><nav class="nav-right" aria-label="メインナビゲーション">${links()}<a class="btn" href="${rootRel}#request">資料請求 <span aria-hidden="true">↗</span></a></nav><details class="mobile-nav"><summary aria-label="メニューを開閉"><span class="menu-lines" aria-hidden="true">☰</span><span>メニュー</span></summary><nav aria-label="モバイルナビゲーション">${links()}</nav></details></div></header>`;
+}
+
+function siteFooter(rootRel) {
+  return `<footer class="site-footer"><div class="wrap"><div class="footer-main"><div class="footer-brand"><a class="footer-logo" href="${rootRel}#top" aria-label="CAREECON Plus 販売パートナープログラム トップへ"><img src="${rootRel}assets/images/careeconplus_logo.png" alt="CAREECON Plus" width="2048" height="375" loading="lazy"><span>販売パートナープログラム</span></a><p class="footer-company">運営会社：BRANU株式会社</p><p class="footer-vision">建設業界をテクノロジーでアップデートする。</p></div><nav class="footer-nav" aria-label="フッターナビゲーション"><a href="${rootRel}#partner-guide">パートナー検討ガイド</a>${NAV.filter(([id]) => id !== 'partner-guide').map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('')}<a href="${rootRel}blog/">ガイド一覧</a></nav><div class="footer-contact"><p>パートナー制度について</p><a class="btn" href="${rootRel}#request">資料を請求する <span aria-hidden="true">→</span></a><small>担当者より個別にご案内します。</small></div></div><div class="footer-bottom"><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー<span class="visually-hidden">（新しいタブで開きます）</span></a><a class="footer-to-top" href="${rootRel}#top">ページ上部へ <span aria-hidden="true">↑</span></a><small>© BRANU Inc. All Rights Reserved.</small></div></div></footer>`;
+}
+
 function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '' }) {
   const canonical = canonicalRel !== undefined ? absUrl(site, canonicalRel) : '';
   const ld = jsonld.length ? `<script type="application/ld+json">\n${jsonForScript(jsonld.length === 1 ? jsonld[0] : { '@context': 'https://schema.org', '@graph': jsonld.map((j) => { const { '@context': _c, ...rest } = j; return rest; }) })}\n</script>` : '';
@@ -26,10 +48,10 @@ function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogTy
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0d39e0">
-${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}${canonical ? `<link rel="canonical" href="${esc(canonical)}">\n<link rel="alternate" type="application/rss+xml" title="${esc(SITE_NAME)} ブログ" href="${esc(absUrl(site, 'feed.xml'))}">\n` : ''}<link rel="icon" href="${rootRel}favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="${rootRel}favicon-32.png">
-<link rel="apple-touch-icon" href="${rootRel}apple-touch-icon.png">
+<meta name="theme-color" content="#244EFF">
+${noindex ? '<meta name="robots" content="noindex,follow">\n' : ''}${canonical ? `<link rel="canonical" href="${esc(canonical)}">\n<link rel="alternate" type="application/rss+xml" title="${esc(SITE_NAME)} ガイド" href="${esc(absUrl(site, 'feed.xml'))}">\n` : ''}<link rel="icon" href="${rootRel}assets/images/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="${rootRel}assets/images/favicon-32.png">
+<link rel="apple-touch-icon" href="${rootRel}assets/images/apple-touch-icon.png">
 <meta property="og:type" content="${ogType}">
 <meta property="og:site_name" content="${esc(SITE_NAME)}">
 <meta property="og:locale" content="ja_JP">
@@ -41,37 +63,17 @@ ${canonical ? `<meta property="og:url" content="${esc(canonical)}">\n` : ''}<met
 <meta name="twitter:description" content="${esc(description)}">
 <meta name="twitter:image" content="${esc(ogImage)}">
 ${ld}
-<link rel="stylesheet" href="${rootRel}colors.css">
-<link rel="stylesheet" href="${rootRel}typography.css">
-<link rel="stylesheet" href="${rootRel}spacing.css">
-<link rel="stylesheet" href="${rootRel}blog.css">
+<link rel="stylesheet" href="${rootRel}assets/css/style.css">
+<link rel="stylesheet" href="${rootRel}assets/css/guide.css">
+<link rel="stylesheet" href="${rootRel}assets/css/fonts.css">
 ${JUICER_TAG}
 ${gaTag(site.gaId)}
 </head>
 <body class="${bodyClass}">
-<header class="site-header">
-  <div class="site-header-inner">
-    <a class="brand" href="${rootRel}">
-      <img src="${rootRel}careeconplus_logo.png" alt="CAREECON+" width="218" height="40">
-      <span class="brand-sub">パートナープログラム</span>
-    </a>
-    <nav class="site-nav" aria-label="メインメニュー">
-      <a class="nav-link" href="${rootRel}blog/">ブログ</a>
-      <a class="btn btn-primary" href="${rootRel}#download-cta">パートナー資料請求</a>
-    </nav>
-  </div>
-</header>
+${siteHeader(rootRel)}
 ${body}
-<footer class="site-footer">
-  <img src="${rootRel}careeconplus_logo.png" alt="CAREECON+" width="164" height="30" loading="lazy">
-  <nav class="footer-nav" aria-label="フッター">
-    <a href="https://branu.jp/">運営会社</a>
-    <a href="${rootRel}privacy/">プライバシーポリシー</a>
-    <a href="https://careecon-plus.com/terms">利用規約</a>
-    <a href="https://careecon-plus.com/contact">お問い合わせ</a>
-  </nav>
-  <p class="copyright">© ${new Date().getUTCFullYear()} BRANU, Inc. All rights reserved.</p>
-</footer>
+${siteFooter(rootRel)}
+<script src="${rootRel}assets/js/main.js" defer></script>
 </body>
 </html>
 `;
@@ -79,9 +81,9 @@ ${body}
 
 function ctaBand(rootRel) {
   return `<section class="cta-band" aria-labelledby="cta-title">
-  <p class="cta-title" id="cta-title">CAREECON+ の販売パートナーを募集しています</p>
+  <p class="cta-title" id="cta-title">CAREECON Plus の販売パートナーを募集しています</p>
   <p class="cta-lead">建設業界の知識がなくても大丈夫。本部が営業から導入まで伴走します。</p>
-  <a class="btn btn-primary btn-lg" href="${rootRel}#download-cta">パートナー資料を請求する</a>
+  <a class="btn btn-primary btn-lg" href="${rootRel}#request">パートナー資料を請求する</a>
 </section>`;
 }
 
@@ -106,15 +108,15 @@ function card(meta, rootRel) {
 
 export function blogIndexPage({ site, articles }) {
   const rootRel = '../';
-  const title = `ブログ｜${SITE_NAME}`;
-  const description = '建設DX・現場管理・パートナー営業に役立つ情報をお届けします。CAREECON+ パートナープログラムのブログです。';
+  const title = `パートナー検討ガイド｜${SITE_NAME}`;
+  const description = '提案の進め方や提携前の確認事項など、販売パートナーを検討するための情報をご紹介します。CAREECON Plus 販売パートナープログラムのガイドです。';
   const list = articles.length
     ? `<ul class="cards">\n${articles.map((a) => card(a, rootRel)).join('\n')}\n</ul>`
     : '<p class="empty">記事を準備中です。公開までしばらくお待ちください。</p>';
   const body = `<main class="container">
-  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">ブログ</span></nav>
-  <h1 class="page-title">ブログ</h1>
-  <p class="page-lead">建設DX・現場管理・パートナー営業に役立つ情報をお届けします。</p>
+  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">パートナー検討ガイド</span></nav>
+  <h1 class="page-title">パートナー検討ガイド</h1>
+  <p class="page-lead">提案の進め方や提携前の確認事項など、販売パートナーを検討するための情報をご紹介します。</p>
   ${list}
 </main>
 ${ctaBand(rootRel)}`;
@@ -135,7 +137,7 @@ ${ctaBand(rootRel)}`;
       })),
     },
   ];
-  return layout({ site, rootRel, title, description, canonicalRel: 'blog/', ogImage: imageUrl(site, 'og-image.png'), jsonld, noindex: articles.length === 0, body, bodyClass: 'page-blog' });
+  return layout({ site, rootRel, title, description, canonicalRel: 'blog/', ogImage: imageUrl(site, 'assets/images/og-image.png'), jsonld, noindex: articles.length === 0, body, bodyClass: 'page-blog' });
 }
 
 export function articlePage({ site, article, html, headings, related }) {
@@ -143,7 +145,7 @@ export function articlePage({ site, article, html, headings, related }) {
   const title = article.seoTitle || `${article.title}｜${SITE_NAME}`;
   const description = truncate(article.description || article.fallbackDescription || article.title, 120);
   const rel = `blog/${article.slug}/`;
-  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : imageUrl(site, 'og-image.png');
+  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : imageUrl(site, 'assets/images/og-image.png');
 
   const toc = headings.filter((h) => h.level === 2);
   const tocHtml = toc.length >= 3
@@ -157,7 +159,7 @@ export function articlePage({ site, article, html, headings, related }) {
     : '';
 
   const body = `<main class="container">
-  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><a href="../">ブログ</a><span aria-hidden="true">›</span><span aria-current="page">${esc(truncate(article.title, 40))}</span></nav>
+  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><a href="../">パートナー検討ガイド</a><span aria-hidden="true">›</span><span aria-current="page">${esc(truncate(article.title, 40))}</span></nav>
   <article class="article">
     <header class="article-header">
       <p class="meta"><time datetime="${ymdJst(article.published)}">${jaDate(article.published)}</time>${ymdJst(article.modified) !== ymdJst(article.published) ? `<span class="meta-sep">・</span>更新 <time datetime="${ymdJst(article.modified)}">${jaDate(article.modified)}</time>` : ''}</p>
@@ -195,7 +197,7 @@ ${ctaBand(rootRel)}`;
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${site.siteUrl}/` },
-          { '@type': 'ListItem', position: 2, name: 'ブログ', item: absUrl(site, 'blog/') },
+          { '@type': 'ListItem', position: 2, name: 'パートナー検討ガイド', item: absUrl(site, 'blog/') },
           { '@type': 'ListItem', position: 3, name: article.title, item: absUrl(site, rel) },
         ],
       }]
@@ -221,5 +223,5 @@ ${html}
     </div>
   </article>
 </main>`;
-  return layout({ site, rootRel, title, description, canonicalRel: `${page.slug}/`, ogImage: imageUrl(site, 'og-image.png'), body, bodyClass: 'page-static' });
+  return layout({ site, rootRel, title, description, canonicalRel: `${page.slug}/`, ogImage: imageUrl(site, 'assets/images/og-image.png'), body, bodyClass: 'page-static' });
 }
