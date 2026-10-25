@@ -41,6 +41,9 @@ function siteFooter(rootRel) {
   return `<footer class="site-footer"><div class="wrap"><div class="footer-main"><div class="footer-brand"><a class="footer-logo" href="${rootRel}#top" aria-label="CAREECON Plus 販売パートナープログラム トップへ"><img src="${rootRel}assets/images/careeconplus_logo.png" alt="CAREECON Plus" width="2048" height="375" loading="lazy"><span>販売パートナープログラム</span></a><p class="footer-company">運営会社：BRANU株式会社</p><p class="footer-vision">建設業界をテクノロジーでアップデートする。</p><p class="footer-note">建設会社の方は <a href="https://careecon-plus.com/">CAREECON Plus 製品サイト</a> をご覧ください。</p></div><nav class="footer-nav" aria-label="フッターナビゲーション"><a href="${rootRel}#partner-guide">パートナー検討ガイド</a>${NAV.filter(([id]) => id !== 'partner-guide').map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('')}<a href="${rootRel}blog/">ガイド一覧</a></nav><div class="footer-contact"><p>パートナー制度について</p><a class="btn" href="${rootRel}#request">資料を請求する <span aria-hidden="true">→</span></a><small>担当者より個別にご案内します。</small></div></div><div class="footer-bottom"><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー<span class="visually-hidden">（新しいタブで開きます）</span></a><a class="footer-to-top" href="${rootRel}#top">ページ上部へ <span aria-hidden="true">↑</span></a><small>© BRANU Inc. All Rights Reserved.</small></div></div></footer>`;
 }
 
+const TOP_SCRIPT = `<style>body:not(.page-home){scroll-behavior:auto}html{scroll-behavior:auto}</style>
+<script>(function(){try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='back_forward')return;if('scrollRestoration' in history)history.scrollRestoration='manual';function top(){if(!location.hash)window.scrollTo({top:0,left:0,behavior:'instant'})}top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>`;
+
 function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '', scripts = '' }) {
   const canonical = canonicalRel !== undefined ? absUrl(site, canonicalRel) : '';
   const ld = jsonld.length ? `<script type="application/ld+json">\n${jsonForScript(jsonld.length === 1 ? jsonld[0] : { '@context': 'https://schema.org', '@graph': jsonld.map((j) => { const { '@context': _c, ...rest } = j; return rest; }) })}\n</script>` : '';
@@ -71,6 +74,7 @@ ${ld}
 <link rel="stylesheet" href="${rootRel}assets/css/fonts.css">
 ${JUICER_TAG}
 ${gaTag(site.gaId)}
+${TOP_SCRIPT}
 </head>
 <body class="${bodyClass}">
 ${siteHeader(rootRel)}
