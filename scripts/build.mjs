@@ -19,7 +19,7 @@ import { createAssetStore } from './lib/assets.mjs';
 import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from './lib/articles.mjs';
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
-import { buildFeed, buildRobots, buildSitemap } from './lib/seo.mjs';
+import { buildFeed, buildLandingJsonLd, buildLlmsTxt, buildRobots, buildSitemap } from './lib/seo.mjs';
 import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage, thanksPage } from './lib/templates.mjs';
 import { injectGa, isValidGaId } from './lib/tracking.mjs';
 import { copyPublicFiles, exists } from './lib/util.mjs';
@@ -122,6 +122,10 @@ export function finalizeLanding(html, site) {
       out = out.replace('<!-- ファビコン -->', `<link rel="canonical" href="${site.siteUrl}/">\n<meta property="og:url" content="${site.siteUrl}/">\n<!-- ファビコン -->`);
     }
   }
+  if (!out.includes('application/ld+json')) {
+    const ld = JSON.stringify(buildLandingJsonLd({ siteUrl: site.siteUrl || FALLBACK_BASE, html: out })).replace(/</g, '\\u003c');
+    out = out.replace('</head>', `<script type="application/ld+json">${ld}</script>\n</head>`);
+  }
   return injectGa(out, site.gaId);
 }
 
@@ -179,8 +183,9 @@ export async function main({ env = process.env, log = console } = {}) {
   if (siteUrl) {
     await fs.writeFile(path.join(distDir, 'sitemap.xml'), buildSitemap({ siteUrl, articles, pages }));
     await fs.writeFile(path.join(distDir, 'robots.txt'), buildRobots({ siteUrl }));
+    await fs.writeFile(path.join(distDir, 'llms.txt'), buildLlmsTxt({ siteUrl, articles }));
     if (blogOn) await fs.writeFile(path.join(distDir, 'feed.xml'), buildFeed({ siteUrl, articles, title: `ブログ｜${SITE_NAME}`, description: '建設DX・現場管理・パートナー営業に役立つ情報' }));
-    log.log('5. sitemap.xml / robots.txt' + (blogOn ? ' / feed.xml' : '') + ' を生成');
+    log.log('5. sitemap.xml / robots.txt / llms.txt' + (blogOn ? ' / feed.xml' : '') + ' を生成');
   } else {
     log.warn('5. sitemap.xml / robots.txt / feed.xml: SITE_URL が未設定のため省略');
   }

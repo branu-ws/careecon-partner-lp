@@ -6,6 +6,7 @@ import test from 'node:test';
 import { fileToMeta, parseDate, parseFrontMatter, readArticleFiles, selectArticles } from '../lib/articles.mjs';
 import { createAssetStore, sniffImage } from '../lib/assets.mjs';
 import { firstParagraphText, renderMarkdown } from '../lib/markdown.mjs';
+import { buildLandingJsonLd, buildLlmsTxt, buildRobots, extractFaq } from '../lib/seo.mjs';
 import { buildSitemap } from '../lib/seo.mjs';
 import { gaTag, injectGa, isValidGaId } from '../lib/tracking.mjs';
 import { esc, safeUrl, toSlug } from '../lib/util.mjs';
@@ -204,4 +205,23 @@ test('thanksPage: noindex・完了文言・GA発火は送信直後の1回だけ�
   assert.doesNotMatch(header, /#model|#support|#getting-started/);
   for (const id of ['product', 'customer-results', 'partners', 'partner-guide', 'faq']) assert.match(header, new RegExp(`#${id}"`));
   assert.doesNotMatch(buildSitemap({ siteUrl: 'https://x.example', articles: [], pages: [] }), /thanks/);
+});
+
+test('LPのSEO: H1に検索語・FAQの構造化データ・llms.txt・robots', async () => {
+  const html = await fs.readFile(new URL('../../index.html', import.meta.url), 'utf8');
+  assert.equal((html.match(/<h1[ >]/g) || []).length, 1, 'H1は1つ');
+  assert.match(html, /<h1 class="hero-label">建設DXの代理店・販売パートナー募集<\/h1>/);
+  assert.match(html, /<title>建設DXの代理店・販売パートナー募集｜CAREECON Plus（キャリコンプラス）<\/title>/);
+  assert.match(html, /新しい収益機会/, 'キャッチコピーは残す');
+  assert.doesNotMatch(html, /3,000社突破/, '導入社数は「3,000社以上」に統一');
+  const faq = extractFaq(html);
+  assert.ok(faq.length >= 9);
+  assert.ok(faq.some((f) => /上記以外の業種/.test(f.a)), '例以外の業種も受け付ける旨');
+  const ld = buildLandingJsonLd({ siteUrl: 'https://x.example', html });
+  const types = ld['@graph'].map((n) => n['@type']);
+  assert.deepEqual(types, ['Organization', 'WebSite', 'WebPage', 'SoftwareApplication', 'FAQPage']);
+  assert.equal(ld['@graph'][4].mainEntity.length, faq.length);
+  const txt = buildLlmsTxt({ siteUrl: 'https://x.example', articles: [{ title: 'T', slug: 's', description: 'D' }] });
+  assert.match(txt, /\[T\]\(https:\/\/x\.example\/blog\/s\/\): D/);
+  assert.match(buildRobots({ siteUrl: 'https://x.example' }), /User-agent: ClaudeBot\nAllow: \//);
 });
