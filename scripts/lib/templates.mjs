@@ -22,23 +22,29 @@ const NAV = [
   ['product', 'プロダクト'],
   ['customer-results', '導入事例'],
   ['model', '提携モデル'],
-  ['partners', '対象企業'],
+  ['partners', '対象業種'],
   ['partner-guide', '検討ガイド'],
   ['support', 'サポート'],
   ['getting-started', '開始の流れ'],
   ['faq', 'よくある質問'],
 ];
 
+// ヘッダーは主要な導線だけに絞る（フッターは全項目）
+const HEADER_NAV = ['product', 'customer-results', 'partners', 'partner-guide', 'faq'];
+
 function siteHeader(rootRel) {
-  const links = (cls = '') => NAV.map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('');
+  const links = () => NAV.filter(([id]) => HEADER_NAV.includes(id)).map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('');
   return `<header class="topbar"><div class="wrap nav"><a aria-label="CAREECON Plus 販売パートナープログラム" class="brand" href="${rootRel}#top"><img alt="CAREECON Plus" src="${rootRel}assets/images/careeconplus_logo.png" width="2048" height="375"><span>販売パートナープログラム</span></a><nav class="nav-right" aria-label="メインナビゲーション">${links()}<a class="btn" href="${rootRel}#request">資料請求 <span aria-hidden="true">↗</span></a></nav><details class="mobile-nav"><summary aria-label="メニューを開閉"><span class="menu-lines" aria-hidden="true">☰</span><span>メニュー</span></summary><nav aria-label="モバイルナビゲーション">${links()}</nav></details></div></header>`;
 }
 
 function siteFooter(rootRel) {
-  return `<footer class="site-footer"><div class="wrap"><div class="footer-main"><div class="footer-brand"><a class="footer-logo" href="${rootRel}#top" aria-label="CAREECON Plus 販売パートナープログラム トップへ"><img src="${rootRel}assets/images/careeconplus_logo.png" alt="CAREECON Plus" width="2048" height="375" loading="lazy"><span>販売パートナープログラム</span></a><p class="footer-company">運営会社：BRANU株式会社</p><p class="footer-vision">建設業界をテクノロジーでアップデートする。</p></div><nav class="footer-nav" aria-label="フッターナビゲーション"><a href="${rootRel}#partner-guide">パートナー検討ガイド</a>${NAV.filter(([id]) => id !== 'partner-guide').map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('')}<a href="${rootRel}blog/">ガイド一覧</a></nav><div class="footer-contact"><p>パートナー制度について</p><a class="btn" href="${rootRel}#request">資料を請求する <span aria-hidden="true">→</span></a><small>担当者より個別にご案内します。</small></div></div><div class="footer-bottom"><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー<span class="visually-hidden">（新しいタブで開きます）</span></a><a class="footer-to-top" href="${rootRel}#top">ページ上部へ <span aria-hidden="true">↑</span></a><small>© BRANU Inc. All Rights Reserved.</small></div></div></footer>`;
+  return `<footer class="site-footer"><div class="wrap"><div class="footer-main"><div class="footer-brand"><a class="footer-logo" href="${rootRel}#top" aria-label="CAREECON Plus 販売パートナープログラム トップへ"><img src="${rootRel}assets/images/careeconplus_logo.png" alt="CAREECON Plus" width="2048" height="375" loading="lazy"><span>販売パートナープログラム</span></a><p class="footer-company">運営会社：BRANU株式会社</p><p class="footer-vision">建設業界をテクノロジーでアップデートする。</p><p class="footer-note">建設会社の方は <a href="https://careecon-plus.com/">CAREECON Plus 製品サイト</a> をご覧ください。</p></div><nav class="footer-nav" aria-label="フッターナビゲーション"><a href="${rootRel}#partner-guide">パートナー検討ガイド</a>${NAV.filter(([id]) => id !== 'partner-guide').map(([id, label]) => `<a href="${rootRel}#${id}">${label}</a>`).join('')}<a href="${rootRel}blog/">ガイド一覧</a></nav><div class="footer-contact"><p>パートナー制度について</p><a class="btn" href="${rootRel}#request">資料を請求する <span aria-hidden="true">→</span></a><small>担当者より個別にご案内します。</small></div></div><div class="footer-bottom"><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー<span class="visually-hidden">（新しいタブで開きます）</span></a><a class="footer-to-top" href="${rootRel}#top">ページ上部へ <span aria-hidden="true">↑</span></a><small>© BRANU Inc. All Rights Reserved.</small></div></div></footer>`;
 }
 
-function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '' }) {
+const TOP_SCRIPT = `<style>body:not(.page-home){scroll-behavior:auto}html{scroll-behavior:auto}</style>
+<script>(function(){try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='back_forward')return;if('scrollRestoration' in history)history.scrollRestoration='manual';function top(){if(!location.hash)window.scrollTo({top:0,left:0,behavior:'instant'})}top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>`;
+
+function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '', scripts = '' }) {
   const canonical = canonicalRel !== undefined ? absUrl(site, canonicalRel) : '';
   const ld = jsonld.length ? `<script type="application/ld+json">\n${jsonForScript(jsonld.length === 1 ? jsonld[0] : { '@context': 'https://schema.org', '@graph': jsonld.map((j) => { const { '@context': _c, ...rest } = j; return rest; }) })}\n</script>` : '';
   return `<!DOCTYPE html>
@@ -68,12 +74,14 @@ ${ld}
 <link rel="stylesheet" href="${rootRel}assets/css/fonts.css">
 ${JUICER_TAG}
 ${gaTag(site.gaId)}
+${TOP_SCRIPT}
 </head>
 <body class="${bodyClass}">
 ${siteHeader(rootRel)}
 ${body}
 ${siteFooter(rootRel)}
 <script src="${rootRel}assets/js/main.js" defer></script>
+${scripts}
 </body>
 </html>
 `;
@@ -137,7 +145,7 @@ ${ctaBand(rootRel)}`;
       })),
     },
   ];
-  return layout({ site, rootRel, title, description, canonicalRel: 'blog/', ogImage: imageUrl(site, 'assets/images/og-image.png'), jsonld, noindex: articles.length === 0, body, bodyClass: 'page-blog' });
+  return layout({ site, rootRel, title, description, canonicalRel: 'blog/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), jsonld, noindex: articles.length === 0, body, bodyClass: 'page-blog' });
 }
 
 export function articlePage({ site, article, html, headings, related }) {
@@ -145,7 +153,7 @@ export function articlePage({ site, article, html, headings, related }) {
   const title = article.seoTitle || `${article.title}｜${SITE_NAME}`;
   const description = truncate(article.description || article.fallbackDescription || article.title, 120);
   const rel = `blog/${article.slug}/`;
-  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : imageUrl(site, 'assets/images/og-image.png');
+  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : imageUrl(site, 'assets/images/og-image.jpg');
 
   const toc = headings.filter((h) => h.level === 2);
   const tocHtml = toc.length >= 3
@@ -223,5 +231,25 @@ ${html}
     </div>
   </article>
 </main>`;
-  return layout({ site, rootRel, title, description, canonicalRel: `${page.slug}/`, ogImage: imageUrl(site, 'assets/images/og-image.png'), body, bodyClass: 'page-static' });
+  return layout({ site, rootRel, title, description, canonicalRel: `${page.slug}/`, ogImage: imageUrl(site, 'assets/images/og-image.jpg'), body, bodyClass: 'page-static' });
+}
+
+/** 送信完了ページ（/thanks/）。検索には載せず、フォーム送信後にだけ表示して計測に使う */
+export function thanksPage({ site, articles = [] }) {
+  const rootRel = '../';
+  const title = `お問い合わせありがとうございました｜${SITE_NAME}`;
+  const description = 'お問い合わせありがとうございました。担当者より追ってご連絡差し上げます。';
+  const latest = articles.slice(0, 3).map((a) => `<li><a href="${rootRel}blog/${a.slug}/">${esc(a.title)}</a></li>`).join('\n');
+  const body = `<main class="container thanks">
+  <div class="thanks-card" role="status">
+    <span class="thanks-mark" aria-hidden="true">✓</span>
+    <h1>お問い合わせありがとうございました</h1>
+    <p class="thanks-lead">担当者より追ってご連絡差し上げます。</p>
+    <div class="thanks-actions"><a class="btn" href="${rootRel}">トップページへ戻る</a></div>
+    ${latest ? `<div class="thanks-guide"><p class="thanks-guide-title">連絡を待つ間に読めるガイド</p><ul>\n${latest}\n</ul></div>` : ''}
+  </div>
+</main>`;
+  // フォーム送信直後の1回だけ、GA4に generate_lead を送る（直接アクセス・再読み込みでは送らない）
+  const scripts = `<script>(function(){try{var t=sessionStorage.getItem('careecon_lead');if(!t)return;sessionStorage.removeItem('careecon_lead');if(window.gtag)window.gtag('event','generate_lead',{form_type:t});}catch(e){}})();</script>`;
+  return layout({ site, rootRel, title, description, canonicalRel: 'thanks/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), noindex: true, body, bodyClass: 'page-thanks', scripts });
 }

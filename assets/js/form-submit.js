@@ -35,9 +35,7 @@
     email: 'メールアドレスの形式をご確認ください。',
     phone: '電話番号の形式をご確認ください。',
     consent: 'プライバシーポリシーへの同意が必要です。チェックを入れてください。',
-    network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。',
-    doneTitle: '送信が完了しました',
-    doneBody: '担当より1営業日以内に、ご登録のメールアドレス宛にご連絡いたします。'
+    network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
   };
 
   // フィールド名 → 送信項目（_m / 2 などの接尾辞はフォームごとの重複回避用）
@@ -148,33 +146,10 @@
     if (el) el.style.display = 'none';
   }
 
+  // 送信が済んだら完了ページへ移動する（計測用。移動先ではGA4の generate_lead を1回だけ送る）
   function showDone(form) {
-    // フレームワーク管理のDOMは消さず、フォームを隠して完了メッセージを横に置く
-    var done = document.createElement('div');
-    done.setAttribute('role', 'status');
-    done.style.cssText = 'padding:24px 8px; text-align:center; color:#182b50; font-family:var(--font-body);';
-    var title = document.createElement('p');
-    title.textContent = MESSAGES.doneTitle;
-    title.style.cssText = 'margin:0 0 10px; font-size:20px; font-weight:900;';
-    var body = document.createElement('p');
-    body.textContent = MESSAGES.doneBody;
-    body.style.cssText = 'margin:0; font-size:14px; line-height:1.8;';
-    done.appendChild(title);
-    done.appendChild(body);
-    form.style.display = 'none';
-    form.parentNode.insertBefore(done, form.nextSibling);
-
-    // 見出し側に「1営業日以内に連絡」の案内がある場合（個別相談モーダル）は、
-    // 完了メッセージと重複するので見出し側を隠す
-    var head = form.previousElementSibling;
-    if (head) {
-      var lines = head.querySelectorAll('p');
-      for (var i = 0; i < lines.length; i++) {
-        var t = lines[i].textContent;
-        // 「＼ 30秒で完了 ／」は送信後には不要なので隠す
-        if (t.indexOf('1営業日以内') !== -1 || t.indexOf('30秒で完了') !== -1) lines[i].style.display = 'none';
-      }
-    }
+    try { sessionStorage.setItem('careecon_lead', detectType(form)); } catch (e) {}
+    window.location.assign(new URL('thanks/', document.baseURI).href);
   }
 
   function setBusy(form, busy) {
