@@ -10,6 +10,7 @@ import { buildSitemap } from '../lib/seo.mjs';
 import { gaTag, injectGa, isValidGaId } from '../lib/tracking.mjs';
 import { esc, safeUrl, toSlug } from '../lib/util.mjs';
 import { buildBlog, buildPages } from '../build.mjs';
+import { thanksPage } from '../lib/templates.mjs';
 
 const FIX = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../fixtures/content/blog');
 const NOW = new Date('2026-10-10T00:00:00+09:00');
@@ -190,4 +191,17 @@ test('buildPages: プライバシーポリシーを /privacy/ に生成し、Jui
   assert.match(html, /<a href="https:\/\/partner\.careecon-plus\.com\/privacy\/"[^>]*>プライバシーポリシー/);
   assert.doesNotMatch(html, /email protected|\[email/);
   assert.match(buildSitemap({ siteUrl: 'https://x.example', articles: [], pages }), /https:\/\/x\.example\/privacy\//);
+});
+
+test('thanksPage: noindex・完了文言・GA発火は送信直後の1回だけ・ヘッダーは主要5項目', () => {
+  const html = thanksPage({ site: { siteUrl: 'https://x.example', gaId: 'G-ABCDEF1234' }, articles: [] });
+  assert.match(html, /<meta name="robots" content="noindex,follow">/);
+  assert.match(html, /<h1>お問い合わせありがとうございました<\/h1>/);
+  assert.match(html, /担当者より追ってご連絡差し上げます。/);
+  assert.match(html, /sessionStorage\.getItem\('careecon_lead'\)/);
+  assert.match(html, /gtag\('event','generate_lead'/);
+  const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
+  assert.doesNotMatch(header, /#model|#support|#getting-started/);
+  for (const id of ['product', 'customer-results', 'partners', 'partner-guide', 'faq']) assert.match(header, new RegExp(`#${id}"`));
+  assert.doesNotMatch(buildSitemap({ siteUrl: 'https://x.example', articles: [], pages: [] }), /thanks/);
 });

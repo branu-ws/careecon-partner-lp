@@ -20,7 +20,7 @@ import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from '.
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
 import { buildFeed, buildRobots, buildSitemap } from './lib/seo.mjs';
-import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage } from './lib/templates.mjs';
+import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage, thanksPage } from './lib/templates.mjs';
 import { injectGa, isValidGaId } from './lib/tracking.mjs';
 import { copyPublicFiles, exists } from './lib/util.mjs';
 
@@ -154,6 +154,11 @@ export async function main({ env = process.env, log = console } = {}) {
   // 2b. 固定ページ（プライバシーポリシー等）
   const pages = await buildPages({ site, pagesDir: path.resolve(ROOT, env.PAGES_DIR || 'content/pages'), distDir, log });
   log.log(`2b. 固定ページ生成: ${pages.map((p) => p.slug).join(', ') || 'なし'}`);
+
+  // 2c. 送信完了ページ（/thanks/）。noindex でサイトマップには含めない
+  await fs.mkdir(path.join(distDir, 'thanks'), { recursive: true });
+  await fs.writeFile(path.join(distDir, 'thanks', 'index.html'), thanksPage({ site, articles }));
+  log.log('2c. 送信完了ページ: /thanks/');
 
   // 3. LP
   const indexPath = path.join(distDir, 'index.html');

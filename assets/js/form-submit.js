@@ -35,9 +35,7 @@
     email: 'メールアドレスの形式をご確認ください。',
     phone: '電話番号の形式をご確認ください。',
     consent: 'プライバシーポリシーへの同意が必要です。チェックを入れてください。',
-    network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。',
-    doneTitle: 'お問い合わせありがとうございました',
-    doneBody: '担当者より追ってご連絡差し上げます。'
+    network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
   };
 
   // フィールド名 → 送信項目（_m / 2 などの接尾辞はフォームごとの重複回避用）
@@ -148,32 +146,10 @@
     if (el) el.style.display = 'none';
   }
 
+  // 送信が済んだら完了ページへ移動する（計測用。移動先ではGA4の generate_lead を1回だけ送る）
   function showDone(form) {
-    // フレームワーク管理のDOMは消さず、カード内の見出し・フォームを隠してサンクス表示に切り替える
-    var card = form.parentNode;
-    var done = document.createElement('div');
-    done.className = 'form-done';
-    done.setAttribute('role', 'status');
-    var mark = document.createElement('span');
-    mark.className = 'form-done-mark';
-    mark.setAttribute('aria-hidden', 'true');
-    mark.textContent = '✓';
-    var title = document.createElement('h3');
-    title.textContent = MESSAGES.doneTitle;
-    var body = document.createElement('p');
-    body.textContent = MESSAGES.doneBody;
-    done.appendChild(mark);
-    done.appendChild(title);
-    done.appendChild(body);
-    // 送信前と同じ高さを保って、画面が跳ねないようにする
-    var h = card.offsetHeight;
-    var kids = card.children;
-    for (var i = 0; i < kids.length; i++) kids[i].style.display = 'none';
-    card.classList.add('is-done');
-    card.style.minHeight = h + 'px';
-    card.appendChild(done);
-    if (card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (window.gtag) window.gtag('event', 'generate_lead', { form_type: detectType(form) });
+    try { sessionStorage.setItem('careecon_lead', detectType(form)); } catch (e) {}
+    window.location.assign(new URL('thanks/', document.baseURI).href);
   }
 
   function setBusy(form, busy) {
