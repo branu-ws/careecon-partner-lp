@@ -23,7 +23,7 @@
       name: 'entry.920544992',     // お名前
       email: 'entry.1830845583',   // メールアドレス
       phone: 'entry.985139572',    // 電話番号
-      purpose: 'entry.REPLACE_ME', // お問い合わせ内容（Googleフォームに「記述式」の質問を追加し、そのentry番号に置き換える）
+      purpose: 'entry.408779846',  // 資料請求目的（ラジオ。最後の選択肢「その他」は自由記述つき）
       type: 'entry.475408195'      // 種別（「資料請求」または「個別相談」）
     }
   };
@@ -35,7 +35,7 @@
     required: function (label) { return label + 'を入力してください。'; },
     email: 'メールアドレスの形式をご確認ください。',
     phone: '電話番号の形式をご確認ください。',
-    purpose: 'お問い合わせ内容を選択してください。',
+    purpose: '資料請求の目的を選択してください。',
     purposeOther: 'その他の内容をご記入ください。',
     consent: 'プライバシーポリシーへの同意が必要です。チェックを入れてください。',
     network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
@@ -171,10 +171,6 @@
     btn.style.cursor = busy ? 'wait' : 'pointer';
   }
 
-  // 選択肢の文言。「その他」は自由記述を添える（例：その他：○○について知りたい）
-  function purposeText(values) {
-    return values.purpose === OTHER_CHOICE ? OTHER_CHOICE + '：' + values.purposeOther : values.purpose;
-  }
 
   // 「その他」を選んだときだけ自由記述欄を出し、必須にする
   function syncOther(form) {
@@ -205,7 +201,13 @@
     body.append(CONFIG.entries.name, values.name);
     body.append(CONFIG.entries.email, values.email);
     body.append(CONFIG.entries.phone, values.phone);
-    body.append(CONFIG.entries.purpose, purposeText(values));
+    // Googleフォームのラジオ「その他」は、特別な値 __other_option__ ＋ 自由記述（.other_option_response）で送る
+    if (values.purpose === OTHER_CHOICE) {
+      body.append(CONFIG.entries.purpose, '__other_option__');
+      body.append(CONFIG.entries.purpose + '.other_option_response', values.purposeOther);
+    } else {
+      body.append(CONFIG.entries.purpose, values.purpose);
+    }
     body.append(CONFIG.entries.type, type);
     // no-cors: 応答は読めない（opaque）。通信自体が成功すれば resolve される
     return fetch(CONFIG.formUrl, {
