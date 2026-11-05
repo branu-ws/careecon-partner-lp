@@ -71,7 +71,7 @@
 
   function collect(form) {
     var values = {};
-    var inputs = form.querySelectorAll('input[name], textarea[name]');
+    var inputs = form.querySelectorAll('input[name], textarea[name], select[name]');
     for (var i = 0; i < inputs.length; i++) {
       var key = fieldKey(inputs[i].name);
       if (!key) continue;
@@ -176,8 +176,8 @@
   function syncOther(form) {
     var box = form.querySelector('.choice-other');
     if (!box) return;
-    var checked = form.querySelector('input[type="radio"][name^="purpose"]:checked');
-    var on = !!checked && checked.value === OTHER_CHOICE;
+    var sel = form.querySelector('select[name^="purpose"]');
+    var on = !!sel && sel.value === OTHER_CHOICE;
     box.hidden = !on;
     var ta = box.querySelector('textarea');
     if (ta) ta.required = on;
@@ -190,7 +190,7 @@
 
   document.addEventListener('change', function (e) {
     var t = e.target;
-    if (!t || t.type !== 'radio' || !t.form || !/^purpose/.test(t.name)) return;
+    if (!t || t.tagName !== 'SELECT' || !t.form || !/^purpose/.test(t.name)) return;
     syncOther(t.form);
     clearError(t.form);
   });
