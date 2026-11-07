@@ -98,6 +98,7 @@ CAREECON Plusは、見積・請求書や案件別の収支などの経営管理�
 ## 関連記事
 
 - [OA機器・IT販売の次の一手 既存の建設業顧客からストック収益をつくる方法](../oa-it-stock-revenue/)
+- [建機・重機レンタル会社、資材商社の方へ 既存の建設会社顧客に提案できるストック型の新商材](../equipment-rental-trading-construction-dx/)
 - [建設業向け代理店の始め方 最初の3か月の進め方](../construction-agency-first-steps/)
 - [SaaS代理店とは？紹介型・販売型の違いと報酬の考え方](../saas-agency-basics/)
 
