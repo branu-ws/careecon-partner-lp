@@ -5,6 +5,7 @@ date: 2026-11-07 00:46
 summary: 建設会社の点検報告書や現場報告書の作成に時間がかかる原因と、効率化の進め方を整理。導入事例として、報告書作成が1件30分から10分になった例も紹介します。
 slug: construction-inspection-report-efficiency
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [報告書, 点検, 施工管理, 建設DX, 事務作業]
 ---
 

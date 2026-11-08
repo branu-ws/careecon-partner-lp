@@ -5,6 +5,7 @@ summary: 検索結果やSNSに表示される説明文（120文字程度）
 seo_title: 検索結果に出るタイトル（省略すると「title｜サイト名」になります）
 slug: english-url-name
 category: 建設DX
+group: 建設DXの基礎
 tags: [建設DX, 中小企業]
 cover: images/cover.png
 draft: true

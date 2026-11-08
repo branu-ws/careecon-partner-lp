@@ -5,6 +5,7 @@ date: 2026-11-03 00:30
 summary: 建設会社と日常的に取引する建材・設備の商社向けに、既存の取引から業務改善の相談を聞き出す方法、追加商材として提案するときの注意点、本部との役割分担と提携前の確認点を整理します。
 slug: building-materials-trading-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [建材商社, 設備商社, 建設DX, パートナー営業]
 ---
 

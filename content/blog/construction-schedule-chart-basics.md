@@ -5,6 +5,7 @@ date: 2026-11-07 00:40
 summary: 建設現場の工程表の基本の作り方、バーチャートなど種類の違い、Excelで管理するときに困りやすい点と、工程を共有しやすくするコツを解説します。
 slug: construction-schedule-chart-basics
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [工程表, 施工管理, 建設DX, 現場管理]
 ---
 

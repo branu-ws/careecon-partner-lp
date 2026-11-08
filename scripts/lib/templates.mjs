@@ -1,5 +1,6 @@
 // ブログのHTMLテンプレート（一覧・記事・固定ページ）。LPと同じヘッダー・フッター・CSSを使う。
 import { extractArticleFaq } from './seo.mjs';
+import { GROUP_ORDER } from './linking.mjs';
 import { esc, jaDate, jsonForScript, truncate, ymdJst } from './util.mjs';
 import { gaTag, JUICER_TAG } from './tracking.mjs';
 
@@ -109,14 +110,14 @@ function tagList(meta) {
   return items.length ? `<ul class="chips">${items.join('')}</ul>` : '';
 }
 
-function card(meta, rootRel) {
+function card(meta, rootRel, level = 2) {
   const href = `${rootRel}blog/${meta.slug}/`;
   const thumb = meta.coverFile ? `<a class="card-thumb" href="${href}" tabindex="-1" aria-hidden="true"><img src="${rootRel}blog/${meta.slug}/${esc(meta.coverFile)}" alt="" loading="lazy" decoding="async"${meta.coverW && meta.coverH ? ` width="${meta.coverW}" height="${meta.coverH}"` : ''}></a>` : '';
   return `<li class="card">
   ${thumb}
   <div class="card-body">
     <p class="meta"><time datetime="${ymdJst(meta.published)}">${jaDate(meta.published)}</time></p>
-    <h2 class="card-title"><a href="${href}">${esc(meta.title)}</a></h2>
+    <h${level} class="card-title"><a href="${href}">${esc(meta.title)}</a></h${level}>
     <p class="card-desc">${esc(meta.description)}</p>
     ${tagList(meta)}
   </div>
@@ -127,8 +128,16 @@ export function blogIndexPage({ site, articles }) {
   const rootRel = '../';
   const title = `パートナー検討ガイド｜${SITE_NAME}`;
   const description = '提案の進め方や提携前の確認事項など、販売パートナーを検討するための情報をご紹介します。CAREECON Plus 販売パートナープログラムのガイドです。';
+  const known = new Set(GROUP_ORDER.map(([g]) => g));
+  const groups = GROUP_ORDER.map(([name, lead]) => ({ name, lead, items: articles.filter((a) => a.group === name) }));
+  const rest = articles.filter((a) => !known.has(a.group));
+  if (rest.length) groups.push({ name: 'その他', lead: '', items: rest });
+  const shown = groups.filter((g) => g.items.length);
+  const nav = shown.length > 1
+    ? `<nav class="guide-jump" aria-label="テーマ別に探す"><p class="guide-jump-title">テーマ別に探す</p><ul>${shown.map((g, i) => `<li><a href="#g${i + 1}">${esc(g.name)}<span>${g.items.length}</span></a></li>`).join('')}</ul></nav>`
+    : '';
   const list = articles.length
-    ? `<ul class="cards">\n${articles.map((a) => card(a, rootRel)).join('\n')}\n</ul>`
+    ? nav + shown.map((g, i) => `<section class="guide-section" aria-labelledby="g${i + 1}"><h2 class="guide-section-title" id="g${i + 1}">${esc(g.name)}</h2>${g.lead ? `<p class="guide-section-lead">${esc(g.lead)}</p>` : ''}<ul class="cards">\n${g.items.map((a) => card(a, rootRel, 3)).join('\n')}\n</ul></section>`).join('\n')
     : '<p class="empty">記事を準備中です。公開までしばらくお待ちください。</p>';
   const body = `<main class="container">
   <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">パートナー検討ガイド</span></nav>
@@ -172,7 +181,7 @@ export function articlePage({ site, article, html, headings, related }) {
     ? `<figure class="cover"><img src="${esc(article.coverFile)}" alt=""${article.coverW && article.coverH ? ` width="${article.coverW}" height="${article.coverH}"` : ''} decoding="async" fetchpriority="high"></figure>`
     : '';
   const relatedHtml = related.length
-    ? `<section class="related" aria-labelledby="related-title"><h2 id="related-title">新着記事</h2><ul class="cards">\n${related.map((a) => card(a, rootRel)).join('\n')}\n</ul></section>`
+    ? `<section class="related" aria-labelledby="related-title"><h2 id="related-title">あわせて読みたい記事</h2><ul class="cards">\n${related.map((a) => card(a, rootRel)).join('\n')}\n</ul></section>`
     : '';
 
   const body = `<main class="container">

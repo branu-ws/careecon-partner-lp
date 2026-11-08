@@ -5,6 +5,7 @@ date: 2026-11-07 00:25
 summary: SaaSの代理店契約でよく選ばれる紹介型と代理販売型の違いを、担当範囲、営業の負担、向いている会社の特徴から整理。自社に合う形を選ぶための確認点を解説します。
 slug: referral-vs-reseller-partner-choice
 category: パートナー営業
+group: 代理店の始め方・判断
 tags: [紹介型, 代理販売型, 代理店募集, SaaS代理店]
 ---
 

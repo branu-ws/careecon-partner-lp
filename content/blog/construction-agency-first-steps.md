@@ -5,6 +5,7 @@ date: 2026-10-25 09:50
 summary: 建設業向けのSaaS代理店・販売パートナーを始めるときの進め方の目安を、情報収集、契約、準備、最初の提案の順に整理。確認したい点と、つまずきやすい点も紹介します。
 slug: construction-agency-first-steps
 category: パートナー営業
+group: 代理店の始め方・判断
 tags: [代理店募集, 建設DX, パートナー営業]
 ---
 

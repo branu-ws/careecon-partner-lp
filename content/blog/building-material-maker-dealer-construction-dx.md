@@ -5,6 +5,7 @@ date: 2026-11-07 00:19
 summary: 工務店や施工店に建材・住宅設備を卸す販売会社向けに、営業訪問での新しい話題づくり、見積・案件管理の悩みを聞く質問、代理店に取り組む前の確認点と本部の役割分担を解説します。
 slug: building-material-maker-dealer-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [建材, 住宅設備, 販売会社, 建設DX, 代理店募集]
 ---
 

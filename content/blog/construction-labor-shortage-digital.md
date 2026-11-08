@@ -5,6 +5,7 @@ date: 2026-11-07 00:58
 summary: 建設業の人手不足に対し、採用だけでなく事務作業の見直しで現場の負担を減らす考え方を整理。見積・日報・報告書など、デジタル化で見直しやすい業務の例を紹介します。
 slug: construction-labor-shortage-digital
 category: 建設DX
+group: 建設DXの基礎
 tags: [人手不足, 建設DX, 事務作業, 中小企業]
 ---
 

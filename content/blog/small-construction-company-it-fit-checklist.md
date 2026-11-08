@@ -5,6 +5,7 @@ date: 2026-11-08 00:40
 summary: 従業員が少ない小規模な建設会社にITツールを提案して成立するのかを、会社の状況、課題、運用体制のチェックリストで整理。向かないケースや、提案前に確認したい点も紹介します。
 slug: small-construction-company-it-fit-checklist
 category: パートナー営業
+group: 提案の進め方
 tags: [小規模建設業, ITツール, 建設SaaS, 営業, チェックリスト]
 ---
 

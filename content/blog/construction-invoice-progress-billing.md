@@ -5,6 +5,7 @@ date: 2026-11-07 00:37
 summary: 建設業の請求書に載せる項目、工事の進み具合に応じて請求する出来高請求の考え方、請求漏れや入金確認の抜けを防ぐ管理のポイントを解説します。
 slug: construction-invoice-progress-billing
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [請求書, 出来高請求, 案件管理, 建設DX]
 ---
 

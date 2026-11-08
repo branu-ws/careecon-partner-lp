@@ -6,6 +6,7 @@ updated: 2026-11-08
 summary: 建設会社のホームページ制作や広告運用を支援するWeb制作会社・広告代理店向けに、集客と採用の相談から業務改善の提案へ広げる考え方、CAREECON Plusの関連機能と提携の流れを解説します。
 slug: web-agency-construction-marketing-recruit
 category: パートナー営業
+group: 業種別の提案
 tags: [Web制作, 広告代理店, 建設業, 採用, 集客]
 ---
 

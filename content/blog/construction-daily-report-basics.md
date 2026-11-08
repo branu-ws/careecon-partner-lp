@@ -5,6 +5,7 @@ date: 2026-11-07 00:43
 summary: 建設現場の作業日報に書く基本の項目、書き方のコツ、日報が続かない原因と運用の工夫を解説。写真や報告書の整理とのつなげ方も紹介します。
 slug: construction-daily-report-basics
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [日報, 施工管理, 建設DX, 現場管理]
 ---
 

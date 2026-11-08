@@ -5,6 +5,7 @@ date: 2026-11-08 00:15
 summary: 建設業の顧問先から「決算が出るまで工事の利益が分からない」と相談された税理士向けに、確認する質問、段階的な提案、会計上の数字と工事別の数字の違い、紹介前の注意点をモデルケースで解説します。
 slug: tax-accountant-construction-profit-consultation
 category: パートナー営業
+group: 業種別の提案
 tags: [税理士, 建設業, 原価管理, 顧問先, 建設DX]
 ---
 
