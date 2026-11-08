@@ -8,6 +8,9 @@ export const GROUP_ORDER = [
   ['原価・見積・日報などの業務解説', '建設会社の業務（原価管理・見積・請求・日報・工程表など）を、提案側の視点で解説'],
 ];
 
+/** 一覧ページ内の見出しID（#g1〜）。GROUP_ORDER の並びで決まる。それ以外は g-other */
+export const groupAnchor = (name) => { const i = GROUP_ORDER.findIndex(([g]) => g === name); return i < 0 ? 'g-other' : `g${i + 1}`; };
+
 const hash = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
 
 /** inbound: 他の記事から既にリンクされている数（少ない記事を優先して、リンクが特定の記事に偏らないようにする）
