@@ -149,6 +149,31 @@ export function finalizeLanding(html, site) {
   return injectGa(out, site.gaId);
 }
 
+/** dist 内の全HTMLで、assets/css・assets/js のURLに ?v=<内容のハッシュ> を付ける */
+export async function stampAssets(distDir) {
+  const crypto = await import('node:crypto');
+  const files = ['assets/css/style.css', 'assets/css/guide.css', 'assets/css/fonts.css', 'assets/js/main.js'];
+  const ver = {};
+  for (const f of files) {
+    try {
+      ver[f] = crypto.createHash('sha1').update(await fs.readFile(path.join(distDir, f))).digest('hex').slice(0, 8);
+    } catch {}
+  }
+  let n = 0;
+  const walk = async (dir) => {
+    for (const e of await fs.readdir(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) { if (e.name !== 'assets') await walk(p); continue; }
+      if (!e.name.endsWith('.html')) continue;
+      const html = await fs.readFile(p, 'utf8');
+      const out = html.replace(/(assets\/(?:css|js)\/[a-z-]+\.(?:css|js))(["'])/g, (m, f, q) => (ver[f] ? `${f}?v=${ver[f]}${q}` : m));
+      if (out !== html) { await fs.writeFile(p, out); n++; }
+    }
+  };
+  await walk(distDir);
+  return n;
+}
+
 export async function main({ env = process.env, log = console } = {}) {
   const t0 = Date.now();
   const distDir = path.resolve(ROOT, env.DIST_DIR || 'dist');
@@ -198,6 +223,10 @@ export async function main({ env = process.env, log = console } = {}) {
     const r = await prerenderLanding(distDir);
     log.log(`4. LPをプリレンダリング: 完成形 ${Math.round(r.bytes / 1024)}KB / 本文 ${r.text}文字`);
   }
+
+  // 4b. CSS/JSのURLに内容のハッシュを付ける（更新したCSSがブラウザ・CDNの古いキャッシュで反映されない問題を防ぐ）
+  const stamped = await stampAssets(distDir);
+  log.log(`4b. CSS/JSにバージョン付与: ${stamped}ページ`);
 
   // 5. SEOファイル
   if (siteUrl) {

@@ -1,6 +1,6 @@
 // ブログのHTMLテンプレート（一覧・記事・固定ページ）。LPと同じヘッダー・フッター・CSSを使う。
 import { extractArticleFaq } from './seo.mjs';
-import { GROUP_ORDER } from './linking.mjs';
+import { GROUP_ORDER, groupAnchor } from './linking.mjs';
 import { esc, jaDate, jsonForScript, truncate, ymdJst } from './util.mjs';
 import { gaTag, JUICER_TAG } from './tracking.mjs';
 
@@ -134,10 +134,10 @@ export function blogIndexPage({ site, articles }) {
   if (rest.length) groups.push({ name: 'その他', lead: '', items: rest });
   const shown = groups.filter((g) => g.items.length);
   const nav = shown.length > 1
-    ? `<nav class="guide-jump" aria-label="テーマ別に探す"><p class="guide-jump-title">テーマ別に探す</p><ul>${shown.map((g, i) => `<li><a href="#g${i + 1}">${esc(g.name)}<span>${g.items.length}</span></a></li>`).join('')}</ul></nav>`
+    ? `<nav class="guide-jump" aria-label="テーマ別に探す"><p class="guide-jump-title">テーマ別に探す</p><ul>${shown.map((g, i) => `<li><a href="#${groupAnchor(g.name)}"><span class="gj-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</span><span class="gj-body"><span class="gj-name">${esc(g.name)}</span>${g.lead ? `<span class="gj-lead">${esc(g.lead)}</span>` : ''}</span><span class="gj-count">${g.items.length}<small>本</small></span></a></li>`).join('')}</ul></nav>`
     : '';
   const list = articles.length
-    ? nav + shown.map((g, i) => `<section class="guide-section" aria-labelledby="g${i + 1}"><h2 class="guide-section-title" id="g${i + 1}">${esc(g.name)}</h2>${g.lead ? `<p class="guide-section-lead">${esc(g.lead)}</p>` : ''}<ul class="cards">\n${g.items.map((a) => card(a, rootRel, 3)).join('\n')}\n</ul></section>`).join('\n')
+    ? nav + shown.map((g, i) => `<section class="guide-section" aria-labelledby="${groupAnchor(g.name)}"><h2 class="guide-section-title" id="${groupAnchor(g.name)}">${esc(g.name)}</h2>${g.lead ? `<p class="guide-section-lead">${esc(g.lead)}</p>` : ''}<ul class="cards">\n${g.items.map((a) => card(a, rootRel, 3)).join('\n')}\n</ul></section>`).join('\n')
     : '<p class="empty">記事を準備中です。公開までしばらくお待ちください。</p>';
   const body = `<main class="container">
   <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">パートナー検討ガイド</span></nav>
@@ -181,7 +181,7 @@ export function articlePage({ site, article, html, headings, related }) {
     ? `<figure class="cover"><img src="${esc(article.coverFile)}" alt=""${article.coverW && article.coverH ? ` width="${article.coverW}" height="${article.coverH}"` : ''} decoding="async" fetchpriority="high"></figure>`
     : '';
   const relatedHtml = related.length
-    ? `<section class="related" aria-labelledby="related-title"><h2 id="related-title">あわせて読みたい記事</h2><ul class="cards">\n${related.map((a) => card(a, rootRel)).join('\n')}\n</ul></section>`
+    ? `<section class="related" aria-labelledby="related-title"><h2 id="related-title">あわせて読みたい記事</h2><ul class="cards">\n${related.map((a) => card(a, rootRel)).join('\n')}\n</ul><p class="related-more">${article.group ? `<a href="${rootRel}blog/#${groupAnchor(article.group)}">「${esc(article.group)}」の記事をすべて見る <span aria-hidden="true">→</span></a>` : ''}<a href="${rootRel}blog/">パートナー検討ガイドの記事一覧 <span aria-hidden="true">→</span></a></p></section>`
     : '';
 
   const body = `<main class="container">
@@ -266,7 +266,7 @@ export function thanksPage({ site, articles = [] }) {
     <h1>お問い合わせありがとうございました</h1>
     <p class="thanks-lead">担当者より追ってご連絡差し上げます。</p>
     <div class="thanks-actions"><a class="btn" href="${rootRel}">トップページへ戻る</a></div>
-    ${latest ? `<div class="thanks-guide"><p class="thanks-guide-title">連絡を待つ間に読めるガイド</p><ul>\n${latest}\n</ul></div>` : ''}
+    ${latest ? `<div class="thanks-guide"><p class="thanks-guide-title">連絡を待つ間に読めるガイド</p><ul>\n${latest}\n</ul><p><a href="${rootRel}blog/">ガイド記事の一覧を見る →</a></p></div>` : ''}
   </div>
 </main>`;
   // フォーム送信直後の1回だけ、GA4に generate_lead を送る（直接アクセス・再読み込みでは送らない）
