@@ -225,3 +225,10 @@ test('LPのSEO: H1に検索語・FAQの構造化データ・llms.txt・robots', 
   assert.match(txt, /\[T\]\(https:\/\/x\.example\/blog\/s\/\): D/);
   assert.match(buildRobots({ siteUrl: 'https://x.example' }), /User-agent: ClaudeBot\nAllow: \//);
 });
+
+test('記事の「よくある質問」をFAQの構造化データ用に取り出す', async () => {
+  const { extractArticleFaq } = await import('../lib/seo.mjs');
+  const html = '<h2 id="a">本文</h2><p>x</p><h2 id="b">よくある質問</h2><h3>Q1</h3><p>A1</p><p>続き</p><h3>Q2</h3><p>A2</p><h2>次</h2><h3>無関係</h3><p>z</p>';
+  assert.deepEqual(extractArticleFaq(html), [{ q: 'Q1', a: 'A1 続き' }, { q: 'Q2', a: 'A2' }]);
+  assert.deepEqual(extractArticleFaq('<h2>本文</h2><p>x</p>'), []);
+});

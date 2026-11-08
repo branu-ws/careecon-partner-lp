@@ -1,11 +1,20 @@
 // ブログのHTMLテンプレート（一覧・記事・固定ページ）。LPと同じヘッダー・フッター・CSSを使う。
+import { extractArticleFaq } from './seo.mjs';
 import { esc, jaDate, jsonForScript, truncate, ymdJst } from './util.mjs';
 import { gaTag, JUICER_TAG } from './tracking.mjs';
 
 export const SITE_NAME = 'CAREECON Plus 販売パートナープログラム';
 // プライバシーポリシー（全ページ・フォーム共通。固定ページ content/pages/privacy.md から /privacy/ に生成される）
 export const PRIVACY_URL = 'https://partner.careecon-plus.com/privacy/';
-const ORG = { '@type': 'Organization', name: 'BRANU, Inc.', url: 'https://branu.jp/' };
+const ORG_ID = 'https://partner.careecon-plus.com/#organization';
+const ORG = {
+  '@type': 'Organization',
+  '@id': ORG_ID,
+  name: 'BRANU株式会社',
+  alternateName: 'BRANU, Inc.',
+  url: 'https://branu.jp/',
+  sameAs: ['https://branu.jp/', 'https://careecon-plus.com/'],
+};
 // SITE_URL が未設定のときの、画像URL用の基準URL（og:image は絶対URLが必要なため）。本番URLにしておく
 export const FALLBACK_BASE = 'https://partner.careecon-plus.com';
 
@@ -153,7 +162,7 @@ export function articlePage({ site, article, html, headings, related }) {
   const title = article.seoTitle || `${article.title}｜${SITE_NAME}`;
   const description = truncate(article.description || article.fallbackDescription || article.title, 120);
   const rel = `blog/${article.slug}/`;
-  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : imageUrl(site, 'assets/images/og-image.jpg');
+  const ogImage = article.coverFile ? imageUrl(site, `${rel}${article.coverFile}`) : article.ogFile ? imageUrl(site, `${rel}${article.ogFile}`) : imageUrl(site, 'assets/images/og-image.jpg');
 
   const toc = headings.filter((h) => h.level === 2);
   const tocHtml = toc.length >= 3
@@ -199,6 +208,8 @@ ${ctaBand(rootRel)}`;
     ...(article.category ? { articleSection: article.category } : {}),
     ...(site.siteUrl ? { mainEntityOfPage: { '@type': 'WebPage', '@id': absUrl(site, rel) } } : {}),
   };
+  const faq = extractArticleFaq(html);
+  const faqLd = faq.length ? [{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) }] : [];
   const crumbs = site.siteUrl
     ? [{
         '@context': 'https://schema.org',
@@ -210,7 +221,7 @@ ${ctaBand(rootRel)}`;
         ],
       }]
     : [];
-  return layout({ site, rootRel, title, description, canonicalRel: rel, ogImage, ogType: 'article', jsonld: [posting, ...crumbs], body, bodyClass: 'page-article' });
+  return layout({ site, rootRel, title, description, canonicalRel: rel, ogImage, ogType: 'article', jsonld: [posting, ...crumbs, ...faqLd], body, bodyClass: 'page-article' });
 }
 
 /** 固定ページ（プライバシーポリシーなど）。content/pages/*.md から生成 */

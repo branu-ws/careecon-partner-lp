@@ -51,12 +51,27 @@ export function extractFaq(html) {
   return out;
 }
 
+/** 記事HTMLの「よくある質問」セクション（h2 → h3の質問 + 続く段落の回答）から Q&A を取り出す */
+export function extractArticleFaq(html) {
+  const sec = /<h2[^>]*>\s*よくある質問\s*<\/h2>([\s\S]*?)(?=<h2[\s>]|$)/.exec(html);
+  if (!sec) return [];
+  const out = [];
+  const re = /<h3[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3[\s>]|$)/g;
+  let m;
+  while ((m = re.exec(sec[1]))) {
+    const q = stripTags(m[1]);
+    const a = stripTags(m[2].replace(/<\/(p|li)>/g, ' '));
+    if (q && a) out.push({ q, a });
+  }
+  return out;
+}
+
 /** LPの構造化データ（組織・サイト・製品・FAQ）。説明文はHTMLの title / description に合わせる */
 export function buildLandingJsonLd({ siteUrl, html }) {
   const pick = (re) => (re.exec(html) || [])[1] || '';
   const title = stripTags(pick(/<title>([\s\S]*?)<\/title>/));
   const description = stripTags(pick(/<meta content="([^"]*)" name="description"/));
-  const org = { '@type': 'Organization', '@id': `${siteUrl}/#organization`, name: 'BRANU株式会社', alternateName: 'BRANU, Inc.', url: 'https://branu.jp/' };
+  const org = { '@type': 'Organization', '@id': `${siteUrl}/#organization`, name: 'BRANU株式会社', alternateName: 'BRANU, Inc.', url: 'https://branu.jp/', sameAs: ['https://branu.jp/', 'https://careecon-plus.com/'] };
   const faq = extractFaq(html);
   const graph = [
     org,
@@ -79,14 +94,23 @@ export function buildLandingJsonLd({ siteUrl, html }) {
   return { '@context': 'https://schema.org', '@graph': graph };
 }
 
-/** AI向けのサイト概要（llms.txt）。LPの内容と公開中の記事から作る */
+/** AI向けのサイト概要（llms.txt）。LPの内容と公開中の記事から作る。記事はカテゴリごとにまとめる */
 export function buildLlmsTxt({ siteUrl, articles = [] }) {
-  const list = articles.map((a) => `- [${a.title}](${siteUrl}/blog/${a.slug}/): ${a.description || a.fallbackDescription || ''}`.trimEnd()).join('\n');
+  const line = (a) => `- [${a.title}](${siteUrl}/blog/${a.slug}/): ${a.description || a.fallbackDescription || ''}`.trimEnd();
+  const GROUPS = [
+    ['パートナー営業', '## 販売パートナー向けの記事（提携の検討・業種別の提案・営業の進め方）'],
+    ['建設DX', '## 建設会社の業務とDXの記事（原価管理・見積・請求・日報・工程表など）'],
+  ];
+  const known = new Set(GROUPS.map(([c]) => c));
+  const sections = GROUPS.map(([cat, head]) => [head, articles.filter((a) => a.category === cat)]);
+  const rest = articles.filter((a) => !known.has(a.category));
+  if (rest.length) sections.push(['## その他の記事', rest]);
+  const list = sections.filter(([, items]) => items.length).map(([head, items]) => `${head}\n${items.map(line).join('\n')}`).join('\n\n');
   return `# CAREECON Plus 販売パートナープログラム
 
 > 建設業向け統合型ツール「CAREECON Plus」（キャリコンプラス）の、代理店・販売パートナーを募集するサイトです。運営はBRANU株式会社。
 
-CAREECON Plus は、見積・請求書や案件別の収支などの経営管理と、AI日報・工程表などの施工管理を一つにまとめた、建設業向けの統合型ツールです。導入は3,000社以上。
+CAREECON Plus は、見積・請求書や案件別の収支などの経営管理と、AI日報・工程表などの施工管理を一つにまとめた、建設業向けの統合型ツールです。導入は3,000社以上。顧客継続率99.67%、建設業界への支援実績17年以上（2026年9月時点・自社調べ）。
 
 ## 提携モデル
 - 紹介型（トスアップ）: 見込み顧客を紹介。商談・契約・導入支援は本部が担当
@@ -100,7 +124,7 @@ OA機器販売会社、IT商社、SaaS企業、人材紹介会社、金融機関
 - [販売パートナー募集（トップ）](${siteUrl}/): 制度の概要、提携モデル、サポート、FAQ、資料請求
 - [パートナー検討ガイド](${siteUrl}/blog/): 提案の進め方や提携前の確認事項
 - [プライバシーポリシー](${siteUrl}/privacy/)
-${list ? `\n## ガイド記事\n${list}\n` : ''}
+${list ? `\n${list}\n` : ''}
 ## 建設会社の方へ
 製品の詳細は [CAREECON Plus 製品サイト](https://careecon-plus.com/) をご覧ください。
 `;

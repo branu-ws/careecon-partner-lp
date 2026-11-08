@@ -16,6 +16,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAssetStore } from './lib/assets.mjs';
+import { generateOgImages } from './lib/ogimage.mjs';
 import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from './lib/articles.mjs';
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
@@ -39,7 +40,7 @@ export function parseSiteUrl(value) {
 }
 
 /** ブログ（一覧・記事）を生成して、公開した記事のメタを返す */
-export async function buildBlog({ site, contentDir, distDir, log = console, now = new Date() }) {
+export async function buildBlog({ site, contentDir, distDir, log = console, now = new Date(), ogImages = false }) {
   const metas = selectArticles(await readArticleFiles(contentDir), { now, warn: (m) => log.warn(`  ・${m}`) });
   const rendered = [];
   for (const meta of metas) {
@@ -63,6 +64,11 @@ export async function buildBlog({ site, contentDir, distDir, log = console, now 
       }
     }
     rendered.push({ meta, html, headings: ctx.headings });
+  }
+  if (ogImages) {
+    const done = await generateOgImages({ distDir, articles: metas.filter((m) => !m.coverFile), log });
+    for (const m of metas) if (done.has(m.slug)) m.ogFile = 'og.jpg';
+    log.log(`  ・記事別のOGP画像: ${done.size}件`);
   }
   for (const { meta, html, headings } of rendered) {
     const related = metas.filter((m) => m.id !== meta.id).slice(0, 3);
@@ -148,7 +154,7 @@ export async function main({ env = process.env, log = console } = {}) {
   let blogOn = false;
   const contentDir = path.resolve(ROOT, env.CONTENT_DIR || 'content/blog');
   if (await exists(contentDir)) {
-    articles = await buildBlog({ site, contentDir, distDir, log });
+    articles = await buildBlog({ site, contentDir, distDir, log, ogImages: env.SKIP_PRERENDER !== '1' && env.SKIP_OG !== '1' });
     blogOn = true;
     log.log(`2. ブログ生成: 公開記事 ${articles.length}件`);
   } else {
