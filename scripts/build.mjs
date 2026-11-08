@@ -17,7 +17,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAssetStore } from './lib/assets.mjs';
 import { generateOgImages } from './lib/ogimage.mjs';
-import { autoLink, pickRelated } from './lib/linking.mjs';
+import { GROUP_ORDER, autoLink, pickRelated } from './lib/linking.mjs';
 import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from './lib/articles.mjs';
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
@@ -43,6 +43,15 @@ export function parseSiteUrl(value) {
 /** ブログ（一覧・記事）を生成して、公開した記事のメタを返す */
 export async function buildBlog({ site, contentDir, distDir, log = console, now = new Date(), ogImages = false }) {
   const metas = selectArticles(await readArticleFiles(contentDir), { now, warn: (m) => log.warn(`  ・${m}`) });
+  // 運用ルールのチェック（公開は止めず、警告だけ出す）。詳しくは CLAUDE.md
+  const groups = GROUP_ORDER.map(([g]) => g);
+  for (const m of metas) {
+    const w = (msg) => log.warn(`  ・[${m.title}] ${msg}`);
+    if (!m.group) w(`group が未入力です（${groups.join(' / ')} のどれか）。一覧の「その他」に入ります`);
+    else if (!groups.includes(m.group)) w(`group「${m.group}」は定義されていません（${groups.join(' / ')}）`);
+    if (m.description.length < 90 || m.description.length > 140) w(`summary が${m.description.length}文字です（110〜130字が目安）`);
+    if ((m.seoTitle || '').replace(/[｜|].*$/, '').length > 45) w('seo_title が長すぎます（全角40字以内が目安）');
+  }
   const rendered = [];
   for (const meta of metas) {
     const dir = path.join(distDir, 'blog', meta.slug);
