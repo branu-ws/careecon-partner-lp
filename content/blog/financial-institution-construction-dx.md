@@ -5,6 +5,7 @@ date: 2026-10-25 09:20
 summary: 融資先に建設会社が多い金融機関向けに、資金面以外の支援としてDXを提案する考え方を整理。案件別の収支把握など、相談を受けやすい課題と、提携前に確認したい点を紹介します。
 slug: financial-institution-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [金融機関, 建設DX, 中小企業]
 ---
 

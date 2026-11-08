@@ -5,6 +5,7 @@ date: 2026-11-08 00:20
 summary: AI関連の商材を代理店として扱いたい会社向けに、汎用AIと業界特化ツールの違いを、情報の持ち込み、業務の流れ、出力の形、導入・定着支援などの観点で比較し、顧客に聞かれる質問への答え方も整理します。
 slug: ai-product-partner-general-vs-industry-ai
 category: パートナー営業
+group: 代理店の始め方・判断
 tags: [AI商材, 代理店, 建設AI, AI日報, 業界特化]
 ---
 

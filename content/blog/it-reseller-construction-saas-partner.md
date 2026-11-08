@@ -5,6 +5,7 @@ date: 2026-11-07 00:22
 summary: クラウドサービスの販売店やIT導入支援を行う事業者が、建設業向けのSaaSを取り扱うときの考え方を整理。既存商材との組み合わせ、確認したい点、紹介型と代理販売型の役割分担を解説します。
 slug: it-reseller-construction-saas-partner
 category: パートナー営業
+group: 業種別の提案
 tags: [販売店, IT導入支援, 建設SaaS, 代理店募集]
 ---
 

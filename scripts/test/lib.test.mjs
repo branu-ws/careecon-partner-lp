@@ -225,3 +225,25 @@ test('LPのSEO: H1に検索語・FAQの構造化データ・llms.txt・robots', 
   assert.match(txt, /\[T\]\(https:\/\/x\.example\/blog\/s\/\): D/);
   assert.match(buildRobots({ siteUrl: 'https://x.example' }), /User-agent: ClaudeBot\nAllow: \//);
 });
+
+test('記事の「よくある質問」をFAQの構造化データ用に取り出す', async () => {
+  const { extractArticleFaq } = await import('../lib/seo.mjs');
+  const html = '<h2 id="a">本文</h2><p>x</p><h2 id="b">よくある質問</h2><h3>Q1</h3><p>A1</p><p>続き</p><h3>Q2</h3><p>A2</p><h2>次</h2><h3>無関係</h3><p>z</p>';
+  assert.deepEqual(extractArticleFaq(html), [{ q: 'Q1', a: 'A1 続き' }, { q: 'Q2', a: 'A2' }]);
+  assert.deepEqual(extractArticleFaq('<h2>本文</h2><p>x</p>'), []);
+});
+
+test('本文の自動リンク: 初出のみ・自分自身と既存リンクは除く・最大3件', async () => {
+  const { autoLink, pickRelated } = await import('../lib/linking.mjs');
+  const rules = [['原価管理', 'cost'], ['日報', 'daily'], ['工程表', 'sched'], ['稟議', 'draft'], ['見積書', 'est']];
+  const published = new Set(['cost', 'daily', 'sched', 'draft', 'est', 'me']);
+  const html = '<h2>原価管理</h2><p>原価管理と日報と原価管理。</p><p>工程表と稟議と見積書。</p><p>日報</p>';
+  const out = autoLink(html, { selfSlug: 'me', published, rules });
+  assert.equal((out.match(/<a /g) || []).length, 3);
+  assert.ok(out.includes('<h2>原価管理</h2>'));
+  assert.equal((out.match(/href="..\/cost\/"/g) || []).length, 1);
+  assert.equal(autoLink('<p>原価管理</p>', { selfSlug: 'cost', published, rules }), '<p>原価管理</p>');
+  assert.equal(autoLink('<p><a href="../cost/">原価管理</a>と日報</p>', { selfSlug: 'me', published, rules }), '<p><a href="../cost/">原価管理</a>と日報</p>');
+  const all = [1, 2, 3, 4, 5].map((n) => ({ id: `${n}`, slug: `s${n}`, tags: [], category: '', group: n < 4 ? 'g' : 'h' }));
+  assert.deepEqual(pickRelated(all[0], all, 2).map((m) => m.group), ['g', 'g']);
+});

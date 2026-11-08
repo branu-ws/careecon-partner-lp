@@ -5,6 +5,7 @@ date: 2026-11-07 00:55
 summary: 建設会社の外注費管理で起きやすい抜け漏れと、案件別に外注費を把握する進め方、削減を考える前に確認したい点を解説します。
 slug: construction-outsourcing-cost-management
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [外注費, 原価管理, 建設DX, 中小企業]
 ---
 

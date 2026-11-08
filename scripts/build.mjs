@@ -16,6 +16,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createAssetStore } from './lib/assets.mjs';
+import { generateOgImages } from './lib/ogimage.mjs';
+import { GROUP_ORDER, autoLink, pickRelated } from './lib/linking.mjs';
 import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from './lib/articles.mjs';
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
@@ -39,15 +41,24 @@ export function parseSiteUrl(value) {
 }
 
 /** ブログ（一覧・記事）を生成して、公開した記事のメタを返す */
-export async function buildBlog({ site, contentDir, distDir, log = console, now = new Date() }) {
+export async function buildBlog({ site, contentDir, distDir, log = console, now = new Date(), ogImages = false }) {
   const metas = selectArticles(await readArticleFiles(contentDir), { now, warn: (m) => log.warn(`  ・${m}`) });
+  // 運用ルールのチェック（公開は止めず、警告だけ出す）。詳しくは CLAUDE.md
+  const groups = GROUP_ORDER.map(([g]) => g);
+  for (const m of metas) {
+    const w = (msg) => log.warn(`  ・[${m.title}] ${msg}`);
+    if (!m.group) w(`group が未入力です（${groups.join(' / ')} のどれか）。一覧の「その他」に入ります`);
+    else if (!groups.includes(m.group)) w(`group「${m.group}」は定義されていません（${groups.join(' / ')}）`);
+    if (m.description.length < 90 || m.description.length > 140) w(`summary が${m.description.length}文字です（110〜130字が目安）`);
+    if ((m.seoTitle || '').replace(/[｜|].*$/, '').length > 45) w('seo_title が長すぎます（全角40字以内が目安）');
+  }
   const rendered = [];
   for (const meta of metas) {
     const dir = path.join(distDir, 'blog', meta.slug);
     const assets = createAssetStore({ outDir: dir, localDir: contentDir });
     const warn = (m) => log.warn(`  ・[${meta.title}] ${m}`);
     const ctx = { assets, warn, headings: [] };
-    const html = await renderMarkdown(meta.body, ctx);
+    const html = autoLink(await renderMarkdown(meta.body, ctx), { selfSlug: meta.slug, published: new Set(metas.map((m) => m.slug)) });
     if (!html.trim()) warn('本文が空です');
     meta.fallbackDescription = firstParagraphText(html);
     if (!meta.description) warn('summary（概要）が未入力のため、本文の冒頭を説明文に使います');
@@ -64,8 +75,17 @@ export async function buildBlog({ site, contentDir, distDir, log = console, now 
     }
     rendered.push({ meta, html, headings: ctx.headings });
   }
+  if (ogImages) {
+    const done = await generateOgImages({ distDir, articles: metas.filter((m) => !m.coverFile), log });
+    for (const m of metas) if (done.has(m.slug)) m.ogFile = 'og.jpg';
+    log.log(`  ・記事別のOGP画像: ${done.size}件`);
+  }
+  // 他の記事からのリンク数を数え、少ない記事を「あわせて読みたい」に優先して選ぶ
+  const inbound = new Map();
+  for (const { meta, html } of rendered) for (const m of html.matchAll(/href="\.\.\/([a-z0-9-]+)\/"/g)) if (m[1] !== meta.slug) inbound.set(m[1], (inbound.get(m[1]) || 0) + 1);
   for (const { meta, html, headings } of rendered) {
-    const related = metas.filter((m) => m.id !== meta.id).slice(0, 3);
+    const related = pickRelated(meta, metas, 4, inbound);
+    for (const r of related) inbound.set(r.slug, (inbound.get(r.slug) || 0) + 1);
     const page = articlePage({ site, article: meta, html, headings, related });
     const dir = path.join(distDir, 'blog', meta.slug);
     await fs.mkdir(dir, { recursive: true });
@@ -148,7 +168,7 @@ export async function main({ env = process.env, log = console } = {}) {
   let blogOn = false;
   const contentDir = path.resolve(ROOT, env.CONTENT_DIR || 'content/blog');
   if (await exists(contentDir)) {
-    articles = await buildBlog({ site, contentDir, distDir, log });
+    articles = await buildBlog({ site, contentDir, distDir, log, ogImages: env.SKIP_PRERENDER !== '1' && env.SKIP_OG !== '1' });
     blogOn = true;
     log.log(`2. ブログ生成: 公開記事 ${articles.length}件`);
   } else {

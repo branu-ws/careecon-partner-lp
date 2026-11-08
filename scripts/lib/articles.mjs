@@ -8,6 +8,7 @@
 //   seo_title: 検索結果のタイトル   任意。省略すると「title｜サイト名」
 //   slug: construction-dx-guide   任意。URLの一部（半角英数とハイフン）。省略するとファイル名
 //   category: 建設DX               任意
+//   group: 業種別の提案             任意。一覧ページの見出しと、記事末尾の「あわせて読みたい」に使う
 //   tags: [建設DX, 中小企業]        任意
 //   cover: images/cover.png       任意。一覧のサムネイルとOGP画像
 //   updated: 2026-10-20           任意。更新日
@@ -77,6 +78,7 @@ export function fileToMeta({ file, text }, { now = new Date() } = {}) {
       seoTitle: str(data.seo_title),
       description: str(data.summary ?? data.description),
       category: str(data.category),
+      group: str(data.group),
       tags: list(data.tags),
       coverRef: str(data.cover),
       body,

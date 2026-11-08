@@ -5,6 +5,7 @@ date: 2026-10-25 09:10
 summary: 建設DXとは、デジタル技術で建設業の業務や経営を変えていく取り組みです。中小建設会社が最初に取り組みやすい業務と、提案する側が押さえたい視点を解説します。
 slug: what-is-construction-dx
 category: 建設DX
+group: 建設DXの基礎
 tags: [建設DX, 中小企業]
 ---
 

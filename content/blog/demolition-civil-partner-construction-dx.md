@@ -5,6 +5,7 @@ date: 2026-11-07 00:10
 summary: 解体工事業者や土木業者を顧客に持つ商社・レンタル会社向けに、現場の事務負担から入る提案の考え方、聞きたい質問、代理店に取り組む前の確認点と本部の役割分担を整理します。
 slug: demolition-civil-partner-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [解体業, 土木, 建設DX, 代理店募集]
 ---
 

@@ -5,6 +5,7 @@ date: 2026-10-25 09:40
 summary: 施工管理は現場の工程・品質・安全などを管理し、経営管理は見積・請求・収支など会社の数字を管理します。違いと関係を整理し、提案時の話し方のヒントを紹介します。
 slug: construction-vs-business-management
 category: 建設DX
+group: 建設DXの基礎
 tags: [施工管理, 経営管理, 建設DX]
 ---
 

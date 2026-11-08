@@ -5,6 +5,7 @@ date: 2026-11-08 00:30
 summary: 建設会社や施工店に作業服・安全用品を納める販売店向けに、現場訪問や納品の機会で聞ける業務の悩み、商品以外の相談を増やす方法、建設ITツールを提案する際の確認点を整理します。
 slug: workwear-safety-goods-dealer-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [作業服, 安全用品, 販売店, 法人営業, 建設DX]
 ---
 

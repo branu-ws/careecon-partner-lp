@@ -5,6 +5,7 @@ date: 2026-11-07 00:52
 summary: 建設業の粗利率の計算方法、見るときの注意点、工事で利益が残らなくなる主な原因と、案件別に確認する見直しのポイントを解説します。
 slug: construction-gross-margin-causes
 category: 建設DX
+group: 原価・見積・日報などの業務解説
 tags: [粗利率, 利益改善, 原価管理, 建設DX]
 ---
 

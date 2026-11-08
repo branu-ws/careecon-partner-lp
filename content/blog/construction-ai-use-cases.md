@@ -5,6 +5,7 @@ date: 2026-11-07 01:01
 summary: 建設業でAIを活用できる業務を、日報・報告書・工程・安全管理などの例で整理。導入するときの考え方と、注意点、確認したいことを解説します。
 slug: construction-ai-use-cases
 category: 建設DX
+group: 建設DXの基礎
 tags: [建設AI, AI日報, 施工管理, 建設DX]
 ---
 

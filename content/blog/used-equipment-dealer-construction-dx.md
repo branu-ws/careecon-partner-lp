@@ -5,6 +5,7 @@ date: 2026-11-07 00:31
 summary: 中古建機や建設機械を販売する会社が、販売後の顧客接点を増やす方法を解説。建設会社の業務の悩みを聞く入口、ストック型の新商材としての建設DX、提携前の確認点を整理します。
 slug: used-equipment-dealer-construction-dx
 category: パートナー営業
+group: 業種別の提案
 tags: [建機販売, 中古建機, 建設DX, 代理店募集]
 ---
 
