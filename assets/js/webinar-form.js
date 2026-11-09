@@ -7,6 +7,7 @@
  *   formUrl : 送信先URL（…/forms/d/e/＜フォームID＞/formResponse）
  *   entries : 各質問の entry.数字（「事前入力したURLを取得」で確認できます）
  *   session : 日程を選ばせる場合のみ。選択肢の文言は content/webinar.json の label と一字一句同じにすること
+ *   department / position : 部署名（任意）・役職（必須）の質問
  *
  * 送信の成否はブラウザ側では判定できません（通信エラー時のみエラー表示）。
  * 受信確認は、Googleフォームの「回答」タブ／スプレッドシートで行ってください。
@@ -18,6 +19,8 @@
     formUrl: '',
     entries: {
       company: '',   // 会社名
+      department: '',// 部署名（任意）
+      position: '',  // 役職
       name: '',      // お名前
       email: '',     // メールアドレス
       phone: '',     // 電話番号
@@ -35,7 +38,7 @@
     consent: 'プライバシーポリシーへの同意が必要です。チェックを入れてください。',
     network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
   };
-  var LABELS = { company: '会社名', name: 'お名前', email: 'メールアドレス', phone: '電話番号' };
+  var LABELS = { company: '会社名', position: '役職', name: 'お名前', email: 'メールアドレス', phone: '電話番号' };
 
   function isConfigured(hasSession) {
     if (!/^https:\/\/docs\.google\.com\/forms\/d\/e\/[^/]+\/formResponse/.test(CONFIG.formUrl)) return false;
@@ -48,7 +51,7 @@
 
   function collect(form) {
     var v = {};
-    ['company', 'name', 'email', 'phone', 'session', 'question'].forEach(function (k) {
+    ['company', 'department', 'position', 'name', 'email', 'phone', 'session', 'question'].forEach(function (k) {
       var el = form.elements[k];
       v[k] = el ? String(el.value || '').trim() : '';
     });
@@ -56,7 +59,7 @@
   }
 
   function validate(v, hasSession) {
-    var order = ['company', 'name', 'email', 'phone'];
+    var order = ['company', 'position', 'name', 'email', 'phone'];
     for (var i = 0; i < order.length; i++) if (!v[order[i]]) return MESSAGES.required(LABELS[order[i]]);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) return MESSAGES.email;
     var digits = v.phone.replace(/[^0-9０-９]/g, '');
@@ -79,6 +82,8 @@
   function send(v, hasSession) {
     var body = new URLSearchParams();
     body.append(CONFIG.entries.company, v.company);
+    if (v.department) body.append(CONFIG.entries.department, v.department);
+    body.append(CONFIG.entries.position, v.position);
     body.append(CONFIG.entries.name, v.name);
     body.append(CONFIG.entries.email, v.email);
     body.append(CONFIG.entries.phone, v.phone);

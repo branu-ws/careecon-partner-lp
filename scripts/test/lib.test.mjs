@@ -256,6 +256,8 @@ test('webinarPage: 独立ページ・同意チェック必須・日程設定の�
   assert.match(none, /data-webinar-form/);
   assert.doesNotMatch(none, /class="lead-form"[^>]*>[\s\S]*name="session"/);
   assert.match(none, /name="privacy_consent" required/);
+  assert.match(none, /name="position" placeholder="[^"]*" required/);
+  assert.doesNotMatch(none, /name="department"[^>]*required/);
   assert.match(none, /assets\/js\/webinar-form\.js/);
   assert.doesNotMatch(none, /form-submit\.js/);
   const some = webinarPage({ site, config: { sessions: [{ label: '2026年12月10日（木）14:00〜' }] } });

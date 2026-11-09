@@ -315,6 +315,8 @@ export function webinarPage({ site, config = {} }) {
           <noscript><p>お申し込みにはJavaScriptを有効にしてください。</p></noscript>
           ${sessionField}
           <div class="field"><label for="wb-company">会社名 <span>必須</span></label><input autocomplete="organization" id="wb-company" name="company" placeholder="例）株式会社〇〇商事" required></div>
+          <div class="field"><label for="wb-department">部署名 <em>任意</em></label><input autocomplete="organization-title" id="wb-department" name="department" placeholder="例）営業部"></div>
+          <div class="field"><label for="wb-position">役職 <span>必須</span></label><input id="wb-position" name="position" placeholder="例）部長" required></div>
           <div class="field"><label for="wb-name">お名前 <span>必須</span></label><input autocomplete="name" id="wb-name" name="name" placeholder="例）山田 太郎" required></div>
           <div class="field"><label for="wb-email">メールアドレス <span>必須</span></label><input autocomplete="email" id="wb-email" name="email" placeholder="example@company.co.jp" required type="email"></div>
           <div class="field"><label for="wb-phone">電話番号 <span>必須</span></label><input autocomplete="tel" id="wb-phone" name="phone" placeholder="例）03-0000-0000" required inputmode="tel" type="tel"></div>
