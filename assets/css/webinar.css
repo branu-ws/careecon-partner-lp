@@ -2,7 +2,7 @@
 .page-webinar{--cy:#29d8ff;--bl:#244EFF;--vi:#7a5cff;--yl:#ffd22e}
 .page-webinar .wb-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);min-height:calc(100vh - 84px)}
 /* ===== 左：LPのネイビーセクションに合わせた訴求エリア ===== */
-.page-webinar .wb-left{position:relative;color:#fff;background:radial-gradient(760px 480px at 100% 0%,#244eff40,transparent 65%),var(--navy)}
+.page-webinar .wb-left{position:relative;color:#fff;background:radial-gradient(640px 520px at 100% 100%,#5fd0ff66,transparent 68%),linear-gradient(165deg,#102253 0%,#15309f 38%,#244EFF 68%,#3fb4ff 100%)}
 .page-webinar .wb-left-in{max-width:680px;margin:0 0 0 auto;padding:44px 56px 88px 32px}
 .page-webinar .wb-crumb{display:flex;gap:10px;font-size:13px;color:#a8bcff;margin:0 0 48px}
 .page-webinar .wb-crumb a{color:#a8bcff;text-decoration:underline;text-underline-offset:3px}
@@ -19,7 +19,7 @@
 .page-webinar .wb-spec dd{margin:0;display:flex;flex-direction:column;gap:4px}
 .page-webinar .wb-spec dd span{font-size:16px;font-weight:700;line-height:1.7;color:var(--ink)}
 .page-webinar .wb-agenda h2{display:flex;flex-direction:column;gap:6px;font-size:26px;line-height:1.5;margin:0 0 20px;color:#fff;letter-spacing:-.02em}
-.page-webinar .wb-agenda h2 span{display:inline-flex;gap:10px;align-items:center;font:800 14px Manrope,var(--font-body);letter-spacing:.1em;color:#a8bcff}
+.page-webinar .wb-agenda h2 span{display:inline-flex;gap:10px;align-items:center;font:800 14px Manrope,var(--font-body);letter-spacing:.1em;color:#dbe6ff}
 .page-webinar .wb-agenda h2 span:before{content:'';width:14px;height:16px;flex:none;background:currentColor;clip-path:polygon(50% 0,94% 25%,94% 75%,50% 100%,6% 75%,6% 25%)}
 .page-webinar .wb-agenda ol{display:grid;gap:10px;margin:0;padding:0;list-style:none;counter-reset:ag}
 .page-webinar .wb-agenda li{counter-increment:ag;position:relative;display:flex;align-items:center;min-height:62px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px 14px 70px}
