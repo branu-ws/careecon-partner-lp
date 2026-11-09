@@ -54,7 +54,7 @@ function siteFooter(rootRel) {
 const TOP_SCRIPT = `<style>body:not(.page-home){scroll-behavior:auto}html{scroll-behavior:auto}</style>
 <script>(function(){try{var n=performance.getEntriesByType('navigation')[0];if(n&&n.type==='back_forward')return;if('scrollRestoration' in history)history.scrollRestoration='manual';function top(){if(!location.hash)window.scrollTo({top:0,left:0,behavior:'instant'})}top();document.addEventListener('DOMContentLoaded',top);window.addEventListener('load',top)}catch(e){}})();</script>`;
 
-function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '', scripts = '' }) {
+function layout({ site, rootRel, title, description, canonicalRel, ogImage, ogType = 'website', jsonld = [], noindex = false, body, bodyClass = '', scripts = '', extraCss = [] }) {
   const canonical = canonicalRel !== undefined ? absUrl(site, canonicalRel) : '';
   const ld = jsonld.length ? `<script type="application/ld+json">\n${jsonForScript(jsonld.length === 1 ? jsonld[0] : { '@context': 'https://schema.org', '@graph': jsonld.map((j) => { const { '@context': _c, ...rest } = j; return rest; }) })}\n</script>` : '';
   return `<!DOCTYPE html>
@@ -82,6 +82,7 @@ ${ld}
 <link rel="stylesheet" href="${rootRel}assets/css/style.css">
 <link rel="stylesheet" href="${rootRel}assets/css/guide.css">
 <link rel="stylesheet" href="${rootRel}assets/css/fonts.css">
+${extraCss.map((f) => `<link rel="stylesheet" href="${rootRel}assets/css/${f}">`).join('\n')}
 ${JUICER_TAG}
 ${gaTag(site.gaId)}
 ${TOP_SCRIPT}
@@ -272,4 +273,58 @@ export function thanksPage({ site, articles = [] }) {
   // フォーム送信直後の1回だけ、GA4に generate_lead を送る（直接アクセス・再読み込みでは送らない）
   const scripts = `<script>(function(){try{var t=sessionStorage.getItem('careecon_lead');if(!t)return;sessionStorage.removeItem('careecon_lead');if(window.gtag)window.gtag('event','generate_lead',{form_type:t});}catch(e){}})();</script>`;
   return layout({ site, rootRel, title, description, canonicalRel: 'thanks/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), noindex: true, body, bodyClass: 'page-thanks', scripts });
+}
+
+/** オンライン説明会の申込ページ（/webinar/）。content/webinar.json の内容から生成する */
+export function webinarPage({ site, config = {} }) {
+  const rootRel = '../';
+  const name = config.title || 'CAREECON Plus 販売パートナー オンライン説明会';
+  const title = `${name}｜申込フォーム｜${SITE_NAME}`;
+  const lead = config.lead || 'CAREECON Plus の販売パートナー制度について、オンラインでご説明します。';
+  const description = truncate(`${name}の申込ページです。提携モデルや本部の支援内容、開始までの流れをオンラインでご説明します。加盟金・初期費用不要。`, 120);
+  const sessions = (config.sessions || []).map((s) => String(s.label ?? '').trim()).filter(Boolean);
+  const agenda = (config.agenda || []).filter((a) => a && a.title);
+  const sessionField = sessions.length
+    ? `<div class="field"><label for="wb-session">参加希望日程 <span>必須</span></label><select id="wb-session" name="session" required><option value="" selected disabled>選択してください</option>${sessions.map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div>`
+    : '';
+  const facts = ['オンライン開催', '加盟金・初期費用不要の販売パートナー制度', ...(sessions.length ? [] : ['開催日程は、お申し込み後に担当者よりメールでご案内します'])];
+  const agendaHtml = agenda.length
+    ? `<section class="webinar-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda">説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
+    : '';
+  const body = `<main class="webinar-wrap">
+  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">オンライン説明会</span></nav>
+  <div class="webinar-grid">
+    <div class="webinar-info">
+      <p class="webinar-label">ONLINE SEMINAR</p>
+      <h1>${esc(name)}</h1>
+      <p class="webinar-lead">${esc(lead)}</p>
+      <ul class="webinar-facts">${facts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+      ${agendaHtml}
+    </div>
+    <div class="form-card webinar-form-card" id="apply">
+      <div class="form-tag">ONLINE SEMINAR</div>
+      <h2>説明会に申し込む</h2>
+      <p>必要事項をご入力のうえ、お申し込みください。</p>
+      <form class="lead-form" data-webinar-form aria-label="オンライン説明会 申込フォーム" method="post" action="#apply" novalidate>
+        <noscript><p>お申し込みにはJavaScriptを有効にしてください。</p></noscript>
+        ${sessionField}
+        <div class="field"><label for="wb-company">会社名 <span>必須</span></label><input autocomplete="organization" id="wb-company" name="company" placeholder="例）株式会社〇〇商事" required></div>
+        <div class="field"><label for="wb-name">お名前 <span>必須</span></label><input autocomplete="name" id="wb-name" name="name" placeholder="例）山田 太郎" required></div>
+        <div class="field"><label for="wb-email">メールアドレス <span>必須</span></label><input autocomplete="email" id="wb-email" name="email" placeholder="example@company.co.jp" required type="email"></div>
+        <div class="field"><label for="wb-phone">電話番号 <span>必須</span></label><input autocomplete="tel" id="wb-phone" name="phone" placeholder="例）03-0000-0000" required inputmode="tel" type="tel"></div>
+        <div class="field"><label for="wb-question">ご質問・ご要望</label><textarea id="wb-question" name="question" rows="3" maxlength="500" placeholder="事前に聞きたいことがあればご記入ください（任意）"></textarea></div>
+        <label class="consent"><input type="checkbox" name="privacy_consent" required><span><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意のうえ送信</span></label>
+        <button class="btn" type="submit">説明会に申し込む <span class="arrow">→</span></button>
+        <p data-form-msg role="alert" hidden></p>
+      </form>
+    </div>
+  </div>
+</main>`;
+  const crumbs = site.siteUrl
+    ? [{ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'ホーム', item: `${site.siteUrl}/` },
+        { '@type': 'ListItem', position: 2, name, item: absUrl(site, 'webinar/') },
+      ] }]
+    : [];
+  return layout({ site, rootRel, title, description, canonicalRel: 'webinar/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), jsonld: crumbs, body, bodyClass: 'page-webinar', extraCss: ['webinar.css'], scripts: `<script src="${rootRel}assets/js/webinar-form.js" defer></script>` });
 }
