@@ -1,58 +1,31 @@
 /* オンライン説明会の申込ページ（/webinar/）：左＝鮮やかなブルー×ネットワーク表現、右＝明るい背景に白いフォーム */
 .page-webinar{--cy:#29d8ff;--bl:#244EFF;--vi:#7a5cff;--yl:#ffd22e}
 .page-webinar .wb-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);min-height:calc(100vh - 84px)}
-/* ===== 左：ブルーのヒーロー ===== */
-.page-webinar .wb-left{position:relative;overflow:hidden;color:#fff;
-  background:radial-gradient(700px 520px at 88% 0%,#29d8ff55,transparent 62%),radial-gradient(800px 620px at 0% 100%,#7a5cff66,transparent 62%),linear-gradient(160deg,#0a1b66 0%,#1534c4 52%,#2a5cff 100%)}
-.page-webinar .wb-left:before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#ffffff14 1px,transparent 1px),linear-gradient(90deg,#ffffff14 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 90% 60% at 70% 0%,#000 10%,transparent 75%);mask-image:radial-gradient(ellipse 90% 60% at 70% 0%,#000 10%,transparent 75%)}
-.page-webinar .wb-net{position:absolute;left:0;top:0;width:100%;height:auto;aspect-ratio:4/3;pointer-events:none;
-  -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%),linear-gradient(90deg,transparent 40%,#000 74%);-webkit-mask-composite:source-in;
-  mask-image:linear-gradient(180deg,#000 45%,transparent 100%),linear-gradient(90deg,transparent 40%,#000 74%);mask-composite:intersect}
-.page-webinar .wb-edge{stroke:#bcd2ff;stroke-width:1.3;stroke-opacity:.65;stroke-dasharray:3 9;animation:wbflow 4s linear infinite}
-.page-webinar .wb-node .o{fill:#0f2a9a;stroke:#fff;stroke-width:1.5;stroke-opacity:.9;animation:wbblink 4.5s ease-in-out infinite;animation-delay:inherit}
-.page-webinar .wb-node .i{fill:var(--cy)}
-.page-webinar .wb-node.is-accent .o{stroke:var(--yl)}
-.page-webinar .wb-node.is-accent .i{fill:var(--yl)}
-
-.page-webinar .wb-ring{fill:none;stroke:#cfe0ff;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:wbring 5s ease-out infinite}
-.page-webinar .wb-ring.r2{animation-delay:-1.7s}.page-webinar .wb-ring.r3{animation-delay:-3.4s}
-.page-webinar .wb-hub{filter:drop-shadow(0 0 20px #29d8ffcc)}
-@keyframes wbflow{to{stroke-dashoffset:-48}}
-@keyframes wbblink{0%,100%{fill:#0f2a9a}50%{fill:#2f57ee}}
-@keyframes wbring{0%{transform:scale(.7);opacity:.8}100%{transform:scale(3.2);opacity:0}}
-.page-webinar .wb-left-in{position:relative;z-index:1;max-width:680px;margin:0 0 0 auto;padding:44px 56px 88px 32px}
-.page-webinar .wb-crumb{display:flex;gap:10px;font-size:13px;color:#c3d3ff;margin:0 0 52px}
-.page-webinar .wb-crumb a{color:#c3d3ff;text-decoration:underline;text-underline-offset:3px}
-.page-webinar .wb-eyebrow{display:inline-flex;align-items:center;gap:10px;font:800 12px Manrope,var(--font-body);letter-spacing:.2em;color:#fff;margin:0 0 22px;padding:7px 14px;border:1px solid #ffffff66;border-radius:999px;background:#ffffff1f}
-.page-webinar .wb-eyebrow i,.page-webinar .form-tag i{width:7px;height:7px;border-radius:50%;background:var(--yl);box-shadow:0 0 10px var(--yl);animation:wbpulse 1.8s ease-in-out infinite}
-@keyframes wbpulse{50%{opacity:.35;transform:scale(.7)}}
-.page-webinar .wb-catch{font-size:clamp(24px,3.1vw,46px);line-height:1.3;letter-spacing:-.05em;font-weight:900;margin:0 0 22px;overflow-wrap:normal;word-break:keep-all;color:#fff;text-shadow:0 4px 28px #0a1b6680}
-.page-webinar h1{font-size:clamp(18px,1.9vw,24px);line-height:1.6;letter-spacing:-.01em;margin:0 0 22px;font-weight:800;color:var(--yl)}
-.page-webinar .wb-lead{font-size:16px;line-height:2;color:#e3ebff;margin:0 0 36px;max-width:600px}
-/* 開催概要：白いパネルで引き締める */
-.page-webinar .wb-spec{margin:0 0 44px;background:#fff;color:var(--ink);border-radius:14px;padding:6px 22px;box-shadow:0 18px 40px #0a1b6655}
-.page-webinar .wb-spec>div{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #e3eaf8}
+/* ===== 左：LPのネイビーセクションに合わせた訴求エリア ===== */
+.page-webinar .wb-left{position:relative;color:#fff;background:radial-gradient(760px 480px at 100% 0%,#244eff40,transparent 65%),var(--navy)}
+.page-webinar .wb-left-in{max-width:680px;margin:0 0 0 auto;padding:44px 56px 88px 32px}
+.page-webinar .wb-crumb{display:flex;gap:10px;font-size:13px;color:#a8bcff;margin:0 0 48px}
+.page-webinar .wb-crumb a{color:#a8bcff;text-decoration:underline;text-underline-offset:3px}
+.page-webinar .wb-label{display:inline-block;font:700 14px Manrope,var(--font-body);letter-spacing:.06em;color:var(--blue);background:#edf2ff;padding:9px 12px;border-radius:4px;margin:0 0 24px}
+.page-webinar .wb-catch{font-size:clamp(28px,3.4vw,50px);line-height:1.4;letter-spacing:-.045em;font-weight:900;margin:0 0 22px;overflow-wrap:normal;word-break:keep-all;color:#fff}
+.page-webinar .wb-catch em{font-style:normal;color:#a8bcff}
+.page-webinar h1{font-size:clamp(17px,1.7vw,21px);line-height:1.7;letter-spacing:-.01em;margin:0 0 20px;font-weight:800;color:#fff;padding-left:12px;border-left:3px solid var(--blue)}
+.page-webinar .wb-lead{font-size:16px;line-height:2;color:#ccd7ec;margin:0 0 36px;max-width:600px}
+.page-webinar .wb-spec{margin:0 0 48px;background:#fff;color:var(--ink);border-radius:10px;padding:6px 22px}
+.page-webinar .wb-spec>div{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
 .page-webinar .wb-spec>div:last-child{border-bottom:0}
 .page-webinar .wb-spec dt{display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:800;color:var(--ink)}
-.page-webinar .wb-spec dt small{font:800 10px Manrope,sans-serif;letter-spacing:.2em;color:var(--bl)}
+.page-webinar .wb-spec dt small{font:800 10px Manrope,sans-serif;letter-spacing:.2em;color:var(--blue)}
 .page-webinar .wb-spec dd{margin:0;display:flex;flex-direction:column;gap:4px}
 .page-webinar .wb-spec dd span{font-size:16px;font-weight:700;line-height:1.7;color:var(--ink)}
-.page-webinar .wb-agenda{margin:0 0 44px}
-.page-webinar .wb-agenda h2{display:flex;flex-direction:column;gap:6px;font-size:26px;line-height:1.5;margin:0 0 20px;color:#fff}
-.page-webinar .wb-agenda h2 span{font:800 12px Manrope,sans-serif;letter-spacing:.2em;color:var(--yl)}
-.page-webinar .wb-agenda ol{display:grid;gap:12px;margin:0;padding:0;list-style:none;counter-reset:ag}
-.page-webinar .wb-agenda li{counter-increment:ag;position:relative;background:#ffffff1c;border:1px solid #ffffff40;border-radius:14px;padding:18px 20px 18px 78px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background .25s,transform .25s}
-.page-webinar .wb-agenda li:hover{background:#ffffff2e;transform:translateX(4px)}
-.page-webinar .wb-agenda li:before{content:counter(ag,decimal-leading-zero);position:absolute;left:20px;top:13px;font:800 32px Manrope,sans-serif;line-height:1.3;color:var(--yl)}
-.page-webinar .wb-agenda b{display:block;font-size:17px;line-height:1.7;color:#fff}
-.page-webinar .wb-agenda p{margin:4px 0 0;font-size:14px;line-height:1.9;color:#d5e1ff}
-.page-webinar .wb-proof{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0;padding:0;list-style:none}
-.page-webinar .wb-proof li{position:relative;padding:18px 10px 16px;text-align:center;border-radius:14px;background:#fff;box-shadow:0 14px 30px #0a1b6640}
-.page-webinar .wb-proof li:before{content:'';position:absolute;left:0;right:0;top:0;height:4px;border-radius:14px 14px 0 0;background:linear-gradient(90deg,var(--bl),var(--cy))}
-.page-webinar .wb-proof b{display:block;font:800 32px/1.3 Manrope,sans-serif;font-variant-numeric:tabular-nums;color:var(--bl)}
-.page-webinar .wb-proof b small{font:700 13px var(--font-body);margin-left:2px;color:var(--ink)}
-.page-webinar .wb-proof span{display:block;margin-top:4px;font-size:12px;line-height:1.6;color:var(--muted);font-weight:700}
-.page-webinar .wb-proof-note{margin:10px 0 0;font-size:12px;color:#c3d3ff}
+.page-webinar .wb-agenda h2{display:flex;flex-direction:column;gap:6px;font-size:26px;line-height:1.5;margin:0 0 20px;color:#fff;letter-spacing:-.02em}
+.page-webinar .wb-agenda h2 span{display:inline-flex;gap:10px;align-items:center;font:800 14px Manrope,var(--font-body);letter-spacing:.1em;color:#a8bcff}
+.page-webinar .wb-agenda h2 span:before{content:'';width:14px;height:16px;flex:none;background:currentColor;clip-path:polygon(50% 0,94% 25%,94% 75%,50% 100%,6% 75%,6% 25%)}
+.page-webinar .wb-agenda ol{display:grid;gap:10px;margin:0;padding:0;list-style:none;counter-reset:ag}
+.page-webinar .wb-agenda li{counter-increment:ag;position:relative;display:flex;align-items:center;min-height:62px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px 14px 70px}
+.page-webinar .wb-agenda li:before{content:counter(ag,decimal-leading-zero);position:absolute;left:20px;top:50%;transform:translateY(-50%);font:800 26px Manrope,sans-serif;color:var(--blue)}
+.page-webinar .wb-agenda b{display:block;font-size:16px;line-height:1.7;color:var(--ink)}
+.page-webinar .wb-agenda p{margin:2px 0 0;font-size:14px;line-height:1.9;color:var(--muted)}
 /* ===== 右：明るい背景に白いフォーム ===== */
 .page-webinar .wb-right{background:#fdfdfe url('../images/fv-logo-background.webp') left -40px top 40px/auto 74% no-repeat}
 .page-webinar .wb-right-in{position:sticky;top:84px;max-width:540px;margin:0 auto 0 0;padding:56px 32px 64px 44px}
@@ -77,7 +50,6 @@
 @media(prefers-reduced-motion:reduce){.page-webinar *,.page-webinar *:before{animation:none!important;transition:none!important}}
 @media(max-width:960px){
   .page-webinar .wb-split{grid-template-columns:minmax(0,1fr);min-height:0}
-  .page-webinar .wb-net{opacity:.8}
   .page-webinar .wb-left-in{max-width:none;margin:0;padding:32px 24px 44px}
   .page-webinar .wb-right-in{position:static;max-width:640px;margin:0 auto;padding:36px 20px 56px}
 }
@@ -86,6 +58,5 @@
   .page-webinar .wb-lead{font-size:15px}
   .page-webinar .wb-spec{padding:4px 16px}
   .page-webinar .wb-spec>div{grid-template-columns:92px minmax(0,1fr)}
-  .page-webinar .wb-proof b{font-size:24px}
   .page-webinar .webinar-form-card{padding:34px 20px 28px}
 }
