@@ -16,16 +16,16 @@
   'use strict';
 
   var CONFIG = {
-    formUrl: '',
+    formUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeSJU9mdGzuYi5VJpJcBYmpn4WV6N3Jo5luOCa2y8r4sFozog/formResponse',
     entries: {
-      company: '',   // 会社名
-      department: '',// 部署名（任意）
-      position: '',  // 役職
-      name: '',      // お名前
-      email: '',     // メールアドレス
-      phone: '',     // 電話番号
-      session: '',   // 参加希望日程（日程選択を使う場合のみ）
-      question: ''   // ご質問・ご要望（任意）
+      company: 'entry.891360759',   // 会社名
+      department: 'entry.1027166697',// 部署名（任意）
+      position: 'entry.923172360',  // 役職
+      name: 'entry.721237079',      // お名前
+      email: 'entry.1898201693',     // メールアドレス
+      phone: 'entry.144224815',     // 電話番号
+      session: 'entry.1777074776',   // 参加希望日程（日程選択を使う場合のみ）
+      question: 'entry.16773318'   // ご質問・ご要望（任意）
     }
   };
 
