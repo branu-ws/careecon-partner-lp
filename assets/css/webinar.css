@@ -7,9 +7,8 @@
 .page-webinar .wb-crumb{display:flex;gap:10px;font-size:13px;color:#a8bcff;margin:0 0 48px}
 .page-webinar .wb-crumb a{color:#a8bcff;text-decoration:underline;text-underline-offset:3px}
 .page-webinar .wb-label{display:inline-block;font:700 14px Manrope,var(--font-body);letter-spacing:.06em;color:var(--blue);background:#edf2ff;padding:9px 12px;border-radius:4px;margin:0 0 24px}
-.page-webinar .wb-catch{font-size:clamp(28px,3.4vw,50px);line-height:1.4;letter-spacing:-.045em;font-weight:900;margin:0 0 22px;overflow-wrap:normal;word-break:keep-all;color:#fff}
-.page-webinar .wb-catch em{font-style:normal;color:#a8bcff}
-.page-webinar h1{font-size:clamp(17px,1.7vw,21px);line-height:1.7;letter-spacing:-.01em;margin:0 0 20px;font-weight:800;color:#fff;padding-left:12px;border-left:3px solid var(--blue)}
+.page-webinar h1{font-size:clamp(24px,2.9vw,42px);line-height:1.4;letter-spacing:-.045em;font-weight:900;margin:0 0 24px;overflow-wrap:normal;word-break:keep-all;color:#fff}
+.page-webinar h1 em{font-style:normal;color:#a8bcff}
 .page-webinar .wb-lead{font-size:16px;line-height:2;color:#ccd7ec;margin:0 0 36px;max-width:600px}
 .page-webinar .wb-spec{margin:0 0 48px;background:#fff;color:var(--ink);border-radius:10px;padding:6px 22px}
 .page-webinar .wb-spec>div{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}

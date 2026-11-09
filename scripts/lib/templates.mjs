@@ -296,8 +296,7 @@ export function webinarPage({ site, config = {} }) {
     <div class="wb-left"><div class="wb-left-in">
       <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
       <p class="wb-label">ONLINE SEMINAR</p>
-      <p class="wb-catch">${esc(config.catch || '建設業界のエコシステムを、ともにつくる。').replace('エコシステム', '<em>エコシステム</em>').replace('、', '、<br>')}</p>
-      <h1>${esc(name)}</h1>
+      <h1>${esc(name).replace(' オンライン説明会', '<br><em>オンライン説明会</em>')}</h1>
       <p class="wb-lead">${esc(lead)}</p>
       <dl class="wb-spec">
         <div><dt><small>FORMAT</small>開催形式</dt><dd><span>オンライン</span></dd></div>
