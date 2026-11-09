@@ -287,37 +287,49 @@ export function webinarPage({ site, config = {} }) {
   const sessionField = sessions.length
     ? `<div class="field"><label for="wb-session">参加希望日程 <span>必須</span></label><select id="wb-session" name="session" required><option value="" selected disabled>選択してください</option>${sessions.map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div>`
     : '';
-  const facts = ['オンライン開催', '加盟金・初期費用不要の販売パートナー制度', ...(sessions.length ? [] : ['開催日程は、お申し込み後に担当者よりメールでご案内します'])];
+  const dateHtml = sessions.length ? sessions.map((s) => `<span>${esc(s)}</span>`).join('') : '<span>お申し込み後、担当者よりメールでご案内</span>';
   const agendaHtml = agenda.length
-    ? `<section class="webinar-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda">説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
+    ? `<section class="wb-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda"><span>AGENDA</span>説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
     : '';
-  const body = `<main class="webinar-wrap">
-  <nav class="breadcrumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">›</span><span aria-current="page">オンライン説明会</span></nav>
-  <div class="webinar-grid">
-    <div class="webinar-info">
-      <p class="webinar-label">ONLINE SEMINAR</p>
+  const body = `<main class="page-webinar-main">
+  <div class="wb-split">
+    <div class="wb-left"><div class="wb-left-in">
+      <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
+      <p class="wb-eyebrow">ONLINE SEMINAR</p>
       <h1>${esc(name)}</h1>
-      <p class="webinar-lead">${esc(lead)}</p>
-      <ul class="webinar-facts">${facts.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+      <p class="wb-lead">${esc(lead)}</p>
+      <dl class="wb-spec">
+        <div><dt>開催形式</dt><dd><span>オンライン</span></dd></div>
+        <div><dt>開催日程</dt><dd>${dateHtml}</dd></div>
+        <div><dt>対象</dt><dd><span>販売パートナーをご検討の企業様</span></dd></div>
+      </dl>
       ${agendaHtml}
-    </div>
-    <div class="form-card webinar-form-card" id="apply">
-      <div class="form-tag">ONLINE SEMINAR</div>
-      <h2>説明会に申し込む</h2>
-      <p>必要事項をご入力のうえ、お申し込みください。</p>
-      <form class="lead-form" data-webinar-form aria-label="オンライン説明会 申込フォーム" method="post" action="#apply" novalidate>
-        <noscript><p>お申し込みにはJavaScriptを有効にしてください。</p></noscript>
-        ${sessionField}
-        <div class="field"><label for="wb-company">会社名 <span>必須</span></label><input autocomplete="organization" id="wb-company" name="company" placeholder="例）株式会社〇〇商事" required></div>
-        <div class="field"><label for="wb-name">お名前 <span>必須</span></label><input autocomplete="name" id="wb-name" name="name" placeholder="例）山田 太郎" required></div>
-        <div class="field"><label for="wb-email">メールアドレス <span>必須</span></label><input autocomplete="email" id="wb-email" name="email" placeholder="example@company.co.jp" required type="email"></div>
-        <div class="field"><label for="wb-phone">電話番号 <span>必須</span></label><input autocomplete="tel" id="wb-phone" name="phone" placeholder="例）03-0000-0000" required inputmode="tel" type="tel"></div>
-        <div class="field"><label for="wb-question">ご質問・ご要望</label><textarea id="wb-question" name="question" rows="3" maxlength="500" placeholder="事前に聞きたいことがあればご記入ください（任意）"></textarea></div>
-        <label class="consent"><input type="checkbox" name="privacy_consent" required><span><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意のうえ送信</span></label>
-        <button class="btn" type="submit">説明会に申し込む <span class="arrow">→</span></button>
-        <p data-form-msg role="alert" hidden></p>
-      </form>
-    </div>
+      <ul class="wb-proof" aria-label="CAREECON Plus の実績">
+        <li><b>3,000<small>社以上</small></b><span>導入実績</span></li>
+        <li><b>99.67<small>%</small></b><span>顧客継続率</span></li>
+        <li><b>17<small>年以上</small></b><span>建設業界への支援実績</span></li>
+      </ul>
+      <p class="wb-proof-note">※2026年9月時点／自社調べ</p>
+    </div></div>
+    <div class="wb-right"><div class="wb-right-in">
+      <div class="form-card webinar-form-card" id="apply">
+        <div class="form-tag">ENTRY FORM</div>
+        <h2>説明会に申し込む</h2>
+        <p>必要事項をご入力のうえ、お申し込みください。</p>
+        <form class="lead-form" data-webinar-form aria-label="オンライン説明会 申込フォーム" method="post" action="#apply" novalidate>
+          <noscript><p>お申し込みにはJavaScriptを有効にしてください。</p></noscript>
+          ${sessionField}
+          <div class="field"><label for="wb-company">会社名 <span>必須</span></label><input autocomplete="organization" id="wb-company" name="company" placeholder="例）株式会社〇〇商事" required></div>
+          <div class="field"><label for="wb-name">お名前 <span>必須</span></label><input autocomplete="name" id="wb-name" name="name" placeholder="例）山田 太郎" required></div>
+          <div class="field"><label for="wb-email">メールアドレス <span>必須</span></label><input autocomplete="email" id="wb-email" name="email" placeholder="example@company.co.jp" required type="email"></div>
+          <div class="field"><label for="wb-phone">電話番号 <span>必須</span></label><input autocomplete="tel" id="wb-phone" name="phone" placeholder="例）03-0000-0000" required inputmode="tel" type="tel"></div>
+          <div class="field"><label for="wb-question">ご質問・ご要望 <em>任意</em></label><textarea id="wb-question" name="question" rows="3" maxlength="500" placeholder="事前に聞きたいことがあればご記入ください"></textarea></div>
+          <label class="consent"><input type="checkbox" name="privacy_consent" required><span><a href="${PRIVACY_URL}" target="_blank" rel="noopener noreferrer">プライバシーポリシー</a>に同意のうえ送信</span></label>
+          <button class="btn" type="submit">説明会に申し込む <span class="arrow">→</span></button>
+          <p data-form-msg role="alert" hidden></p>
+        </form>
+      </div>
+    </div></div>
   </div>
 </main>`;
   const crumbs = site.siteUrl
