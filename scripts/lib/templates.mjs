@@ -278,7 +278,7 @@ export function thanksPage({ site, articles = [] }) {
 /** 「パートナーとつながり広がるエコシステム」を表す背景のネットワーク図（装飾。CSSでゆっくり動く） */
 function webinarNetwork() {
   const hex = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => { const a = (Math.PI / 3) * i - Math.PI / 2; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
-  const hub = [940, 75];
+  const hub = [1010, 95];
   const sat = [[700, 60, 8], [800, 150, 10], [1100, 40, 9], [1150, 200, 10], [1060, 330, 8], [880, 300, 12], [640, 230, 9], [520, 120, 7], [400, 60, 8], [300, 200, 8], [760, 420, 10], [1000, 520, 9], [560, 380, 8], [180, 330, 7], [860, 600, 8], [1120, 640, 9], [420, 520, 7], [700, 700, 9]];
   const pts = [hub, ...sat];
   const edges = [[0, 1], [0, 2], [0, 3], [0, 4], [0, 6], [1, 8], [8, 9], [8, 10], [2, 7], [7, 6], [4, 5], [5, 12], [6, 11], [7, 13], [11, 13], [11, 12], [12, 16], [13, 17], [10, 14], [11, 15], [15, 18], [17, 18], [15, 12], [14, 17]];
@@ -312,8 +312,8 @@ export function webinarPage({ site, config = {} }) {
     : '';
   const body = `<main class="page-webinar-main">
   <div class="wb-split">
-    ${webinarNetwork()}
-    <div class="wb-left"><div class="wb-left-in">
+    <div class="wb-left">
+      ${webinarNetwork()}<div class="wb-left-in">
       <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
       <p class="wb-eyebrow"><i aria-hidden="true"></i>ONLINE SEMINAR</p>
       <p class="wb-catch">${esc(config.catch || '建設業界のエコシステムを、ともにつくる。').replace('、', '、<br>')}</p>
