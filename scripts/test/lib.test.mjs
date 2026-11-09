@@ -11,7 +11,7 @@ import { buildSitemap } from '../lib/seo.mjs';
 import { gaTag, injectGa, isValidGaId } from '../lib/tracking.mjs';
 import { esc, safeUrl, toSlug } from '../lib/util.mjs';
 import { buildBlog, buildPages } from '../build.mjs';
-import { thanksPage } from '../lib/templates.mjs';
+import { thanksPage, webinarPage } from '../lib/templates.mjs';
 
 const FIX = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../fixtures/content/blog');
 const NOW = new Date('2026-10-10T00:00:00+09:00');
@@ -246,4 +246,20 @@ test('本文の自動リンク: 初出のみ・自分自身と既存リンクは
   assert.equal(autoLink('<p><a href="../cost/">原価管理</a>と日報</p>', { selfSlug: 'me', published, rules }), '<p><a href="../cost/">原価管理</a>と日報</p>');
   const all = [1, 2, 3, 4, 5].map((n) => ({ id: `${n}`, slug: `s${n}`, tags: [], category: '', group: n < 4 ? 'g' : 'h' }));
   assert.deepEqual(pickRelated(all[0], all, 2).map((m) => m.group), ['g', 'g']);
+});
+
+test('webinarPage: 独立ページ・同意チェック必須・日程設定の有無でフォーム項目が変わる・資料請求フォームと混ざらない', () => {
+  const site = { siteUrl: 'https://x.example', gaId: '' };
+  const none = webinarPage({ site, config: { title: 'テスト説明会', sessions: [], agenda: [{ title: '概要', text: '説明' }] } });
+  assert.match(none, /rel="canonical" href="https:\/\/x\.example\/webinar\/"/);
+  assert.doesNotMatch(none, /noindex/);
+  assert.match(none, /data-webinar-form/);
+  assert.doesNotMatch(none, /class="lead-form"[^>]*>[\s\S]*name="session"/);
+  assert.match(none, /name="privacy_consent" required/);
+  assert.match(none, /name="position" placeholder="[^"]*" required/);
+  assert.doesNotMatch(none, /name="department"[^>]*required/);
+  assert.match(none, /assets\/js\/webinar-form\.js/);
+  assert.doesNotMatch(none, /form-submit\.js/);
+  const some = webinarPage({ site, config: { sessions: [{ label: '2026年12月10日（木）14:00〜' }] } });
+  assert.match(some, /<select id="wb-session" name="session" required>[\s\S]*2026年12月10日（木）14:00〜/);
 });

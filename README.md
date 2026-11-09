@@ -67,3 +67,8 @@ SITE_URL=https://example.com node scripts/build.mjs   # dist/ に出力
 - 毎時の定期実行は、リポジトリに60日間動きがないと GitHub に自動停止されます（記事を更新していれば止まりません）。止まったら Actions タブから再有効化してください
 - 今すぐ反映したいとき: Actions > Build & Deploy > Run workflow
 - Actions の初回実行は、本番での確認が必要です
+
+## オンライン説明会の申込ページ（/webinar/）
+- 内容・日程は `content/webinar.json` で編集（`sessions` を空にすると日程選択なし＝「日程は申込後にメールで案内」）。日程を入れる場合は、Googleフォームの選択肢と `label` を一字一句そろえる
+- 送信先は `assets/js/webinar-form.js` の `CONFIG`（説明会専用のGoogleフォームのURLと entry 番号）。資料請求フォーム（form-submit.js）とは別フォームにして回答を分ける。未設定の間は送信ボタンで「準備中」と表示される
+- 送信後は /thanks/ へ移動し、GA4 の generate_lead（form_type=オンライン説明会）が送られる

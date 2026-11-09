@@ -1,0 +1,61 @@
+/* オンライン説明会の申込ページ（/webinar/）：左＝鮮やかなブルー×ネットワーク表現、右＝明るい背景に白いフォーム */
+.page-webinar{--cy:#29d8ff;--bl:#244EFF;--vi:#7a5cff;--yl:#ffd22e}
+.page-webinar .wb-split{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);min-height:calc(100vh - 84px)}
+/* ===== 左：LPのネイビーセクションに合わせた訴求エリア ===== */
+.page-webinar .wb-left{position:relative;color:#fff;background:radial-gradient(640px 520px at 100% 100%,#5fd0ff66,transparent 68%),linear-gradient(165deg,#102253 0%,#15309f 38%,#244EFF 68%,#3fb4ff 100%)}
+.page-webinar .wb-left-in{max-width:680px;margin:0 0 0 auto;padding:44px 56px 88px 32px}
+.page-webinar .wb-crumb{display:flex;gap:10px;font-size:13px;color:#a8bcff;margin:0 0 48px}
+.page-webinar .wb-crumb a{color:#a8bcff;text-decoration:underline;text-underline-offset:3px}
+.page-webinar .wb-label{display:inline-block;font:700 14px Manrope,var(--font-body);letter-spacing:.06em;color:var(--blue);background:#edf2ff;padding:9px 12px;border-radius:4px;margin:0 0 24px}
+.page-webinar h1{font-size:clamp(24px,2.9vw,42px);line-height:1.4;letter-spacing:-.045em;font-weight:900;margin:0 0 24px;overflow-wrap:normal;word-break:keep-all;color:#fff}
+.page-webinar h1 em{font-style:normal;color:#a8bcff}
+.page-webinar .wb-lead{font-size:16px;line-height:2;color:#ccd7ec;margin:0 0 36px;max-width:600px}
+.page-webinar .wb-spec{margin:0 0 48px;background:#fff;color:var(--ink);border-radius:10px;padding:6px 22px}
+.page-webinar .wb-spec>div{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.page-webinar .wb-spec>div:last-child{border-bottom:0}
+.page-webinar .wb-spec dt{display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:800;color:var(--ink)}
+.page-webinar .wb-spec dt small{font:800 10px Manrope,sans-serif;letter-spacing:.2em;color:var(--blue)}
+.page-webinar .wb-spec dd{margin:0;display:flex;flex-direction:column;gap:4px}
+.page-webinar .wb-spec dd span{font-size:16px;font-weight:700;line-height:1.7;color:var(--ink)}
+.page-webinar .wb-agenda h2{display:flex;flex-direction:column;gap:6px;font-size:26px;line-height:1.5;margin:0 0 20px;color:#fff;letter-spacing:-.02em}
+.page-webinar .wb-agenda h2 span{display:inline-flex;gap:10px;align-items:center;font:800 14px Manrope,var(--font-body);letter-spacing:.1em;color:#dbe6ff}
+.page-webinar .wb-agenda h2 span:before{content:'';width:14px;height:16px;flex:none;background:currentColor;clip-path:polygon(50% 0,94% 25%,94% 75%,50% 100%,6% 75%,6% 25%)}
+.page-webinar .wb-agenda ol{display:grid;gap:10px;margin:0;padding:0;list-style:none;counter-reset:ag}
+.page-webinar .wb-agenda li{counter-increment:ag;position:relative;display:flex;align-items:center;min-height:62px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px 14px 70px}
+.page-webinar .wb-agenda li:before{content:counter(ag,decimal-leading-zero);position:absolute;left:20px;top:50%;transform:translateY(-50%);font:800 26px Manrope,sans-serif;color:var(--blue)}
+.page-webinar .wb-agenda b{display:block;font-size:16px;line-height:1.7;color:var(--ink)}
+.page-webinar .wb-agenda p{margin:2px 0 0;font-size:14px;line-height:1.9;color:var(--muted)}
+/* ===== 右：明るい背景に白いフォーム ===== */
+.page-webinar .wb-right{background:#fdfdfe url('../images/fv-logo-background.webp') left -40px top 40px/auto 74% no-repeat}
+.page-webinar .wb-right-in{position:sticky;top:84px;max-width:540px;margin:0 auto 0 0;padding:56px 32px 64px 44px}
+.page-webinar .webinar-form-card{position:relative;overflow:hidden;border:1px solid #d6e0f7;border-top:0;border-radius:20px;padding:40px 32px 34px;background:#fff;box-shadow:0 30px 70px #1a2f8a33,0 4px 12px #1a2f8a14}
+.page-webinar .webinar-form-card:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--cy),var(--bl) 55%,var(--vi))}
+.page-webinar .form-tag{display:flex;align-items:center;gap:8px;letter-spacing:.2em;color:var(--bl)}
+.page-webinar .form-tag i{background:var(--bl);box-shadow:0 0 10px var(--bl)}
+.page-webinar .webinar-form-card h2{font-size:30px;letter-spacing:-.03em}
+.page-webinar .field label em{font-size:12px;font-style:normal;color:var(--muted);background:#eef1f6;padding:2px 6px;border-radius:3px}
+.page-webinar .field input,.page-webinar .field textarea,.page-webinar .field select{background-color:#f7f9ff;transition:border-color .2s,box-shadow .2s}
+.page-webinar .field input:focus,.page-webinar .field textarea:focus,.page-webinar .field select:focus{outline:0;border-color:var(--bl);box-shadow:0 0 0 3px #244eff2e}
+.page-webinar .field textarea{min-height:88px}
+.page-webinar .lead-form .btn{position:relative;overflow:hidden;min-height:58px;font-size:17px;background:linear-gradient(90deg,var(--bl),#4b6bff 55%,var(--vi));box-shadow:0 12px 28px #244eff55;transition:transform .15s,box-shadow .15s}
+.page-webinar .lead-form .btn:before{content:'';position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,#ffffff66,transparent);transform:skewX(-20deg);animation:wbshine 3.6s ease-in-out infinite}
+@keyframes wbshine{0%,55%{left:-60%}100%{left:130%}}
+.page-webinar .lead-form .btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px #244eff77}
+.page-webinar [data-form-msg]{margin:2px 0 0;padding:9px 12px;border-radius:8px;background:#fff3f3;border:1px solid #f3b6bb;color:#c0262d;font-size:13px;font-weight:700;line-height:1.6}
+.page-webinar [data-form-msg][hidden]{display:none}
+.page-webinar .consent{display:flex;align-items:center;gap:8px;margin:3px 0 6px;color:var(--ink);font-size:14px;line-height:1.8;cursor:pointer}
+.page-webinar .consent input{width:16px;height:16px;margin:0;flex:none;accent-color:var(--bl);cursor:pointer}
+.page-webinar .consent a{color:var(--bl);text-decoration:underline;text-underline-offset:3px}
+@media(prefers-reduced-motion:reduce){.page-webinar *,.page-webinar *:before{animation:none!important;transition:none!important}}
+@media(max-width:960px){
+  .page-webinar .wb-split{grid-template-columns:minmax(0,1fr);min-height:0}
+  .page-webinar .wb-left-in{max-width:none;margin:0;padding:32px 24px 44px}
+  .page-webinar .wb-right-in{position:static;max-width:640px;margin:0 auto;padding:36px 20px 56px}
+}
+@media(max-width:620px){
+  .page-webinar .wb-crumb{margin-bottom:32px}
+  .page-webinar .wb-lead{font-size:15px}
+  .page-webinar .wb-spec{padding:4px 16px}
+  .page-webinar .wb-spec>div{grid-template-columns:92px minmax(0,1fr)}
+  .page-webinar .webinar-form-card{padding:34px 20px 28px}
+}

@@ -22,7 +22,7 @@ import { parseDate, parseFrontMatter, readArticleFiles, selectArticles } from '.
 import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
 import { buildFeed, buildLandingJsonLd, buildLlmsTxt, buildRobots, buildSitemap } from './lib/seo.mjs';
-import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage, thanksPage } from './lib/templates.mjs';
+import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage, thanksPage, webinarPage } from './lib/templates.mjs';
 import { injectGa, isValidGaId } from './lib/tracking.mjs';
 import { copyPublicFiles, exists } from './lib/util.mjs';
 
@@ -152,7 +152,7 @@ export function finalizeLanding(html, site) {
 /** dist 内の全HTMLで、assets/css・assets/js のURLに ?v=<内容のハッシュ> を付ける */
 export async function stampAssets(distDir) {
   const crypto = await import('node:crypto');
-  const files = ['assets/css/style.css', 'assets/css/guide.css', 'assets/css/fonts.css', 'assets/js/main.js'];
+  const files = ['assets/css/style.css', 'assets/css/guide.css', 'assets/css/fonts.css', 'assets/css/webinar.css', 'assets/js/main.js', 'assets/js/webinar-form.js'];
   const ver = {};
   for (const f of files) {
     try {
@@ -208,6 +208,18 @@ export async function main({ env = process.env, log = console } = {}) {
   await fs.mkdir(path.join(distDir, 'thanks'), { recursive: true });
   await fs.writeFile(path.join(distDir, 'thanks', 'index.html'), thanksPage({ site, articles }));
   log.log('2c. 送信完了ページ: /thanks/');
+
+  // 2d. オンライン説明会の申込ページ（/webinar/）。内容は content/webinar.json
+  let webinarConfig = {};
+  try {
+    webinarConfig = JSON.parse(await fs.readFile(path.resolve(ROOT, env.WEBINAR_CONFIG || 'content/webinar.json'), 'utf8'));
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw new Error(`content/webinar.json を読み込めません: ${e.message}`);
+  }
+  await fs.mkdir(path.join(distDir, 'webinar'), { recursive: true });
+  await fs.writeFile(path.join(distDir, 'webinar', 'index.html'), webinarPage({ site, config: webinarConfig }));
+  pages.push({ slug: 'webinar', updated: null });
+  log.log('2d. オンライン説明会の申込ページ: /webinar/');
 
   // 3. LP
   const indexPath = path.join(distDir, 'index.html');
