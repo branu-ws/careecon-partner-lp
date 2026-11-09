@@ -9,10 +9,12 @@
   -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%),linear-gradient(90deg,transparent 40%,#000 74%);-webkit-mask-composite:source-in;
   mask-image:linear-gradient(180deg,#000 45%,transparent 100%),linear-gradient(90deg,transparent 40%,#000 74%);mask-composite:intersect}
 .page-webinar .wb-edge{stroke:#bcd2ff;stroke-width:1.3;stroke-opacity:.65;stroke-dasharray:3 9;animation:wbflow 4s linear infinite}
-.page-webinar .wb-node polygon{fill:#0f2a9a;stroke:#fff;stroke-width:1.5;stroke-opacity:.9;animation:wbblink 4.5s ease-in-out infinite;animation-delay:inherit}
-.page-webinar .wb-node circle{fill:var(--cy)}
-.page-webinar .wb-node.is-accent polygon{stroke:var(--yl)}
-.page-webinar .wb-node.is-accent circle{fill:var(--yl)}
+.page-webinar .wb-node .o{fill:#0f2a9a;stroke:#fff;stroke-width:1.5;stroke-opacity:.9;animation:wbblink 4.5s ease-in-out infinite;animation-delay:inherit}
+.page-webinar .wb-node .i{fill:var(--cy)}
+.page-webinar .wb-node.is-accent .o{stroke:var(--yl)}
+.page-webinar .wb-node.is-accent .i{fill:var(--yl)}
+/* TOPのヒーローと同じ、ロゴを大きく薄く敷いた背景（左端で切れる） */
+.page-webinar .wb-mark{position:absolute;left:-190px;bottom:-60px;height:92%;width:auto;fill:#fff;opacity:.07;pointer-events:none}
 .page-webinar .wb-ring{fill:none;stroke:#cfe0ff;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:wbring 5s ease-out infinite}
 .page-webinar .wb-ring.r2{animation-delay:-1.7s}.page-webinar .wb-ring.r3{animation-delay:-3.4s}
 .page-webinar .wb-hub{filter:drop-shadow(0 0 20px #29d8ffcc)}
@@ -53,7 +55,7 @@
 .page-webinar .wb-proof span{display:block;margin-top:4px;font-size:12px;line-height:1.6;color:var(--muted);font-weight:700}
 .page-webinar .wb-proof-note{margin:10px 0 0;font-size:12px;color:#c3d3ff}
 /* ===== 右：明るい背景に白いフォーム ===== */
-.page-webinar .wb-right{background:radial-gradient(#bccaf5 1px,transparent 1.4px) 0 0/26px 26px,linear-gradient(180deg,#f4f7ff,#e6edff)}
+.page-webinar .wb-right{background:#fdfdfe url('../images/fv-logo-background.webp') left -40px top 40px/auto 74% no-repeat}
 .page-webinar .wb-right-in{position:sticky;top:84px;max-width:540px;margin:0 auto 0 0;padding:56px 32px 64px 44px}
 .page-webinar .webinar-form-card{position:relative;overflow:hidden;border:1px solid #d6e0f7;border-top:0;border-radius:20px;padding:40px 32px 34px;background:#fff;box-shadow:0 30px 70px #1a2f8a33,0 4px 12px #1a2f8a14}
 .page-webinar .webinar-form-card:before{content:'';position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--cy),var(--bl) 55%,var(--vi))}

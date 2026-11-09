@@ -275,6 +275,12 @@ export function thanksPage({ site, articles = [] }) {
   return layout({ site, rootRel, title, description, canonicalRel: 'thanks/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), noindex: true, body, bodyClass: 'page-thanks', scripts });
 }
 
+/** CAREECON+ のロゴマーク（角丸の三角形6つで作る六角形）。座標は 0〜315 × 0〜375 */
+const LOGO_TRIANGLES = ['145,40 145,180 20,110', '190,6 190,140 313,72', '2,138 2,280 125,208', '310,138 310,278 185,208', '145,232 145,372 20,300', '165,232 165,372 292,300'];
+function logoMark(main, accent) {
+  return LOGO_TRIANGLES.map((pts, i) => `<polygon points="${pts}" fill="${i === 1 ? accent : main}" stroke="${i === 1 ? accent : main}" stroke-width="16" stroke-linejoin="round"/>`).join('');
+}
+
 /** 「パートナーとつながり広がるエコシステム」を表す背景のネットワーク図（装飾。CSSでゆっくり動く） */
 function webinarNetwork() {
   const hex = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => { const a = (Math.PI / 3) * i - Math.PI / 2; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
@@ -283,14 +289,14 @@ function webinarNetwork() {
   const pts = [hub, ...sat];
   const edges = [[0, 1], [0, 2], [0, 3], [0, 4], [0, 6], [1, 8], [8, 9], [8, 10], [2, 7], [7, 6], [4, 5], [5, 12], [6, 11], [7, 13], [11, 13], [11, 12], [12, 16], [13, 17], [10, 14], [11, 15], [15, 18], [17, 18], [15, 12], [14, 17]];
   const lines = edges.map(([a, b], i) => `<line class="wb-edge" style="animation-delay:-${(i * 0.7).toFixed(1)}s" x1="${pts[a][0]}" y1="${pts[a][1]}" x2="${pts[b][0]}" y2="${pts[b][1]}"/>`).join('');
-  const nodes = sat.map(([x, y, r], i) => `<g class="wb-node${i % 4 === 1 ? ' is-accent' : ''}" style="animation-delay:-${(i * 0.9).toFixed(1)}s"><polygon points="${hex(x, y, r * 1.9)}"/><circle cx="${x}" cy="${y}" r="${(r * 0.38).toFixed(1)}"/></g>`).join('');
+  const nodes = sat.map(([x, y, r], i) => `<g class="wb-node${i % 4 === 1 ? ' is-accent' : ''}" style="animation-delay:-${(i * 0.9).toFixed(1)}s"><circle class="o" cx="${x}" cy="${y}" r="${(r * 1.1).toFixed(1)}"/><circle class="i" cx="${x}" cy="${y}" r="${(r * 0.4).toFixed(1)}"/></g>`).join('');
   return `<svg class="wb-net" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
 <defs><linearGradient id="wbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#29d8ff"/><stop offset="1" stop-color="#7a5cff"/></linearGradient><radialGradient id="wbh" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3d63ff" stop-opacity=".55"/><stop offset="1" stop-color="#3d63ff" stop-opacity="0"/></radialGradient></defs>
 <circle cx="${hub[0]}" cy="${hub[1]}" r="230" fill="url(#wbh)"/>
 <g class="wb-edges">${lines}</g>
 <g class="wb-rings"><circle class="wb-ring" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r2" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r3" cx="${hub[0]}" cy="${hub[1]}" r="90"/></g>
 ${nodes}
-<g class="wb-hub"><polygon points="${hex(hub[0], hub[1], 58)}" fill="#0a1544" stroke="url(#wbg)" stroke-width="2.5"/><polygon points="${hex(hub[0], hub[1], 36)}" fill="url(#wbg)" opacity=".92"/><path d="M${hub[0] - 12} ${hub[1]}h24M${hub[0]} ${hub[1] - 12}v24" stroke="#fff" stroke-width="4" stroke-linecap="round"/></g>
+<g class="wb-hub"><circle cx="${hub[0]}" cy="${hub[1]}" r="74" fill="#0c1f80" fill-opacity=".72" stroke="#ffffff55" stroke-width="1.5"/><g transform="translate(${hub[0] - 55} ${hub[1] - 66}) scale(.35)">${logoMark('#ffffff', '#29d8ff')}</g></g>
 </svg>`;
 }
 
@@ -313,6 +319,7 @@ export function webinarPage({ site, config = {} }) {
   const body = `<main class="page-webinar-main">
   <div class="wb-split">
     <div class="wb-left">
+      <svg class="wb-mark" viewBox="0 0 315 375" aria-hidden="true" focusable="false">${logoMark('#fff', '#fff')}</svg>
       ${webinarNetwork()}<div class="wb-left-in">
       <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
       <p class="wb-eyebrow"><i aria-hidden="true"></i>ONLINE SEMINAR</p>
