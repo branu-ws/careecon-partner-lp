@@ -275,6 +275,25 @@ export function thanksPage({ site, articles = [] }) {
   return layout({ site, rootRel, title, description, canonicalRel: 'thanks/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), noindex: true, body, bodyClass: 'page-thanks', scripts });
 }
 
+/** 「パートナーとつながり広がるエコシステム」を表す背景のネットワーク図（装飾。CSSでゆっくり動く） */
+function webinarNetwork() {
+  const hex = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => { const a = (Math.PI / 3) * i - Math.PI / 2; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
+  const hub = [940, 75];
+  const sat = [[700, 60, 8], [800, 150, 10], [1100, 40, 9], [1150, 200, 10], [1060, 330, 8], [880, 300, 12], [640, 230, 9], [520, 120, 7], [400, 60, 8], [300, 200, 8], [760, 420, 10], [1000, 520, 9], [560, 380, 8], [180, 330, 7], [860, 600, 8], [1120, 640, 9], [420, 520, 7], [700, 700, 9]];
+  const pts = [hub, ...sat];
+  const edges = [[0, 1], [0, 2], [0, 3], [0, 4], [0, 6], [1, 8], [8, 9], [8, 10], [2, 7], [7, 6], [4, 5], [5, 12], [6, 11], [7, 13], [11, 13], [11, 12], [12, 16], [13, 17], [10, 14], [11, 15], [15, 18], [17, 18], [15, 12], [14, 17]];
+  const lines = edges.map(([a, b], i) => `<line class="wb-edge" style="animation-delay:-${(i * 0.7).toFixed(1)}s" x1="${pts[a][0]}" y1="${pts[a][1]}" x2="${pts[b][0]}" y2="${pts[b][1]}"/>`).join('');
+  const nodes = sat.map(([x, y, r], i) => `<g class="wb-node${i % 4 === 1 ? ' is-accent' : ''}" style="animation-delay:-${(i * 0.9).toFixed(1)}s"><polygon points="${hex(x, y, r * 1.9)}"/><circle cx="${x}" cy="${y}" r="${(r * 0.38).toFixed(1)}"/></g>`).join('');
+  return `<svg class="wb-net" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMin meet" aria-hidden="true" focusable="false">
+<defs><linearGradient id="wbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#29d8ff"/><stop offset="1" stop-color="#7a5cff"/></linearGradient><radialGradient id="wbh" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3d63ff" stop-opacity=".55"/><stop offset="1" stop-color="#3d63ff" stop-opacity="0"/></radialGradient></defs>
+<circle cx="${hub[0]}" cy="${hub[1]}" r="230" fill="url(#wbh)"/>
+<g class="wb-edges">${lines}</g>
+<g class="wb-rings"><circle class="wb-ring" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r2" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r3" cx="${hub[0]}" cy="${hub[1]}" r="90"/></g>
+${nodes}
+<g class="wb-hub"><polygon points="${hex(hub[0], hub[1], 58)}" fill="#0a1544" stroke="url(#wbg)" stroke-width="2.5"/><polygon points="${hex(hub[0], hub[1], 36)}" fill="url(#wbg)" opacity=".92"/><path d="M${hub[0] - 12} ${hub[1]}h24M${hub[0]} ${hub[1] - 12}v24" stroke="#fff" stroke-width="4" stroke-linecap="round"/></g>
+</svg>`;
+}
+
 /** オンライン説明会の申込ページ（/webinar/）。content/webinar.json の内容から生成する */
 export function webinarPage({ site, config = {} }) {
   const rootRel = '../';
@@ -289,19 +308,21 @@ export function webinarPage({ site, config = {} }) {
     : '';
   const dateHtml = sessions.length ? sessions.map((s) => `<span>${esc(s)}</span>`).join('') : '<span>お申し込み後、担当者よりメールでご案内</span>';
   const agendaHtml = agenda.length
-    ? `<section class="wb-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda"><span>AGENDA</span>説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
+    ? `<section class="wb-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda"><span>// AGENDA</span>説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
     : '';
   const body = `<main class="page-webinar-main">
   <div class="wb-split">
+    ${webinarNetwork()}
     <div class="wb-left"><div class="wb-left-in">
       <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
-      <p class="wb-eyebrow">ONLINE SEMINAR</p>
+      <p class="wb-eyebrow"><i aria-hidden="true"></i>ONLINE SEMINAR</p>
+      <p class="wb-catch">${esc(config.catch || '建設業界のエコシステムを、ともにつくる。').replace('、', '、<br>')}</p>
       <h1>${esc(name)}</h1>
       <p class="wb-lead">${esc(lead)}</p>
       <dl class="wb-spec">
-        <div><dt>開催形式</dt><dd><span>オンライン</span></dd></div>
-        <div><dt>開催日程</dt><dd>${dateHtml}</dd></div>
-        <div><dt>対象</dt><dd><span>販売パートナーをご検討の企業様</span></dd></div>
+        <div><dt><small>FORMAT</small>開催形式</dt><dd><span>オンライン</span></dd></div>
+        <div><dt><small>DATE</small>開催日程</dt><dd>${dateHtml}</dd></div>
+        <div><dt><small>FOR</small>対象</dt><dd><span>販売パートナーをご検討の企業様</span></dd></div>
       </dl>
       ${agendaHtml}
       <ul class="wb-proof" aria-label="CAREECON Plus の実績">
@@ -313,7 +334,7 @@ export function webinarPage({ site, config = {} }) {
     </div></div>
     <div class="wb-right"><div class="wb-right-in">
       <div class="form-card webinar-form-card" id="apply">
-        <div class="form-tag">ENTRY FORM</div>
+        <div class="form-tag"><i aria-hidden="true"></i>ENTRY FORM</div>
         <h2>説明会に申し込む</h2>
         <p>必要事項をご入力のうえ、お申し込みください。</p>
         <form class="lead-form" data-webinar-form aria-label="オンライン説明会 申込フォーム" method="post" action="#apply" novalidate>
