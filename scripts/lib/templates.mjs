@@ -275,12 +275,6 @@ export function thanksPage({ site, articles = [] }) {
   return layout({ site, rootRel, title, description, canonicalRel: 'thanks/', ogImage: imageUrl(site, 'assets/images/og-image.jpg'), noindex: true, body, bodyClass: 'page-thanks', scripts });
 }
 
-/** CAREECON+ のロゴマーク（角丸の三角形6つで作る六角形）。座標は 0〜315 × 0〜375 */
-const LOGO_TRIANGLES = ['145,40 145,180 20,110', '190,6 190,140 313,72', '2,138 2,280 125,208', '310,138 310,278 185,208', '145,232 145,372 20,300', '165,232 165,372 292,300'];
-function logoMark(main, accent) {
-  return LOGO_TRIANGLES.map((pts, i) => `<polygon points="${pts}" fill="${i === 1 ? accent : main}" stroke="${i === 1 ? accent : main}" stroke-width="16" stroke-linejoin="round"/>`).join('');
-}
-
 /** 「パートナーとつながり広がるエコシステム」を表す背景のネットワーク図（装飾。CSSでゆっくり動く） */
 function webinarNetwork() {
   const hex = (cx, cy, r) => Array.from({ length: 6 }, (_, i) => { const a = (Math.PI / 3) * i - Math.PI / 2; return `${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`; }).join(' ');
@@ -296,7 +290,7 @@ function webinarNetwork() {
 <g class="wb-edges">${lines}</g>
 <g class="wb-rings"><circle class="wb-ring" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r2" cx="${hub[0]}" cy="${hub[1]}" r="90"/><circle class="wb-ring r3" cx="${hub[0]}" cy="${hub[1]}" r="90"/></g>
 ${nodes}
-<g class="wb-hub"><circle cx="${hub[0]}" cy="${hub[1]}" r="74" fill="#0c1f80" fill-opacity=".72" stroke="#ffffff55" stroke-width="1.5"/><g transform="translate(${hub[0] - 55} ${hub[1] - 66}) scale(.35)">${logoMark('#ffffff', '#29d8ff')}</g></g>
+<g class="wb-hub"><circle cx="${hub[0]}" cy="${hub[1]}" r="34" fill="#0c1f80" stroke="#fff" stroke-width="2.5"/><circle cx="${hub[0]}" cy="${hub[1]}" r="14" fill="#29d8ff"/></g>
 </svg>`;
 }
 
@@ -319,7 +313,6 @@ export function webinarPage({ site, config = {} }) {
   const body = `<main class="page-webinar-main">
   <div class="wb-split">
     <div class="wb-left">
-      <svg class="wb-mark" viewBox="0 0 315 375" aria-hidden="true" focusable="false">${logoMark('#fff', '#fff')}</svg>
       ${webinarNetwork()}<div class="wb-left-in">
       <nav class="wb-crumb" aria-label="パンくずリスト"><a href="${rootRel}">ホーム</a><span aria-hidden="true">/</span><span aria-current="page">オンライン説明会</span></nav>
       <p class="wb-eyebrow"><i aria-hidden="true"></i>ONLINE SEMINAR</p>

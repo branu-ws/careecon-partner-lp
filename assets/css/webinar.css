@@ -13,8 +13,7 @@
 .page-webinar .wb-node .i{fill:var(--cy)}
 .page-webinar .wb-node.is-accent .o{stroke:var(--yl)}
 .page-webinar .wb-node.is-accent .i{fill:var(--yl)}
-/* TOPのヒーローと同じ、ロゴを大きく薄く敷いた背景（左端で切れる） */
-.page-webinar .wb-mark{position:absolute;left:-190px;bottom:-60px;height:92%;width:auto;fill:#fff;opacity:.07;pointer-events:none}
+
 .page-webinar .wb-ring{fill:none;stroke:#cfe0ff;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:wbring 5s ease-out infinite}
 .page-webinar .wb-ring.r2{animation-delay:-1.7s}.page-webinar .wb-ring.r3{animation-delay:-3.4s}
 .page-webinar .wb-hub{filter:drop-shadow(0 0 20px #29d8ffcc)}
@@ -36,7 +35,7 @@
 .page-webinar .wb-spec>div:last-child{border-bottom:0}
 .page-webinar .wb-spec dt{display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:800;color:var(--ink)}
 .page-webinar .wb-spec dt small{font:800 10px Manrope,sans-serif;letter-spacing:.2em;color:var(--bl)}
-.page-webinar .wb-spec dd{margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.page-webinar .wb-spec dd{margin:0;display:flex;flex-direction:column;gap:4px}
 .page-webinar .wb-spec dd span{font-size:16px;font-weight:700;line-height:1.7;color:var(--ink)}
 .page-webinar .wb-agenda{margin:0 0 44px}
 .page-webinar .wb-agenda h2{display:flex;flex-direction:column;gap:6px;font-size:26px;line-height:1.5;margin:0 0 20px;color:#fff}
