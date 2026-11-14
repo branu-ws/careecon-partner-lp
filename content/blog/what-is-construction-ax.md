@@ -1,13 +1,12 @@
 ---
 title: 建設AXとは？DXとの違いと、中小建設会社が取り組むときの考え方
 seo_title: 建設AXとは DXとの違いと中小建設会社の取り組み方｜CAREECON Plus
-date: 2026-11-14 09:00
+date: 2026-11-14 00:10
 summary: 建設AXとは、建設業の業務や意思決定をAI前提で変えていく取り組みです。DXとの違い、注目される背景、日報や工程表などで変わる業務の例、中小建設会社が最初に確認したいことを分かりやすく解説します。
 slug: what-is-construction-ax
 category: 建設DX
 group: 建設DXの基礎
 tags: [建設AX, 建設DX, 建設AI, 中小企業]
-draft: true
 ---
 
 建設AXとは、建設業の業務や意思決定を、AI（人工知能）を前提に変えていく取り組みです。AXは「AI Transformation」の略で、BRANUはDXで蓄積したデータをAIが理解し、現場や経営で活用することを建設業の次のステージと位置づけています。

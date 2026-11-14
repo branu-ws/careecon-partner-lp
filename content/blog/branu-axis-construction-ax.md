@@ -1,13 +1,12 @@
 ---
 title: BRANU AXISとは？建設AXを推進するAI戦略プロジェクトの内容
 seo_title: BRANU AXISとは 建設AXを推進するAI戦略プロジェクトの内容｜CAREECON Plus
-date: 2026-11-14 09:10
+date: 2026-11-14 00:20
 summary: BRANU AXISとは、BRANUが2026年9月に発表した、中小建設企業の建設AXを推進するAI戦略プロジェクトです。4つの取り組み、建設AIコアBRANU BRAIN、AIエージェント、建設AXの進化の4段階を整理し、提案側が押さえたい点も解説します。
 slug: branu-axis-construction-ax
 category: 建設DX
 group: 建設DXの基礎
 tags: [BRANU AXIS, 建設AX, 建設AI, CAREECON Plus]
-draft: true
 ---
 
 BRANU AXIS（ブラニュー アクシス）とは、BRANUが2026年9月11日に発表した、中小建設企業の建設AX（AI Transformation）を推進するAI戦略プロジェクトです。建設AIコア「BRANU BRAIN」と、建設AXプラットフォーム「CAREECON Platform」を軸に、DXで蓄積したデータを活用して、業務プロセスや意思決定をAIで変えていくことを目指しています。
