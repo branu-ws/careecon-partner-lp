@@ -45,6 +45,8 @@ export const AUTO_LINK_RULES = [
   ['休眠顧客', 'dormant-customers-follow-up-construction'],
   ['稟議', 'new-product-approval-proposal-template'],
   ['代理販売型', 'referral-vs-reseller-partner-choice'],
+  ['BRANU AXIS', 'branu-axis-construction-ax'],
+  ['建設AX', 'what-is-construction-ax'],
   ['建設DX', 'what-is-construction-dx'],
 ];
 
