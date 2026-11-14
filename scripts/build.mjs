@@ -23,7 +23,7 @@ import { firstParagraphText, renderMarkdown } from './lib/markdown.mjs';
 import { prerenderLanding } from './prerender.mjs';
 import { buildFeed, buildLandingJsonLd, buildLlmsTxt, buildRobots, buildSitemap } from './lib/seo.mjs';
 import { articlePage, blogIndexPage, FALLBACK_BASE, SITE_NAME, staticPage, thanksPage, webinarPage } from './lib/templates.mjs';
-import { injectGa, isValidGaId } from './lib/tracking.mjs';
+import { injectGa, injectClarity, isValidGaId, isValidClarityId } from './lib/tracking.mjs';
 import { copyPublicFiles, exists } from './lib/util.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -133,7 +133,7 @@ export async function buildPages({ site, pagesDir, distDir, log = console }) {
   return out;
 }
 
-/** LPのheadに canonical / og:url / GA を反映する */
+/** LPのheadに canonical / og:url / GA / Clarity を反映する */
 export function finalizeLanding(html, site) {
   let out = html;
   if (site.siteUrl) {
@@ -146,7 +146,7 @@ export function finalizeLanding(html, site) {
     const ld = JSON.stringify(buildLandingJsonLd({ siteUrl: site.siteUrl || FALLBACK_BASE, html: out })).replace(/</g, '\\u003c');
     out = out.replace('</head>', `<script type="application/ld+json">${ld}</script>\n</head>`);
   }
-  return injectGa(out, site.gaId);
+  return injectClarity(injectGa(out, site.gaId), site.clarityId);
 }
 
 /** dist 内の全HTMLで、assets/css・assets/js のURLに ?v=<内容のハッシュ> を付ける */
@@ -180,10 +180,12 @@ export async function main({ env = process.env, log = console } = {}) {
   const siteUrl = parseSiteUrl((env.SITE_URL || '').trim());
   const gaId = (env.GA_MEASUREMENT_ID || '').trim();
   if (gaId && !isValidGaId(gaId)) throw new Error(`GA_MEASUREMENT_ID の形式が不正です（G-XXXXXXXXXX）: ${gaId}`);
-  const site = { siteUrl, gaId };
+  const clarityId = (env.CLARITY_PROJECT_ID || '').trim();
+  if (clarityId && !isValidClarityId(clarityId)) throw new Error(`CLARITY_PROJECT_ID の形式が不正です（英小文字と数字）: ${clarityId}`);
+  const site = { siteUrl, gaId, clarityId };
 
   log.log(`ビルド開始 → ${path.relative(ROOT, distDir) || '.'}`);
-  log.log(`  公開URL: ${siteUrl || '(未設定: canonical/sitemap等は作りません)'} / GA: ${gaId || '(未設定)'}`);
+  log.log(`  公開URL: ${siteUrl || '(未設定: canonical/sitemap等は作りません)'} / GA: ${gaId || '(未設定)'} / Clarity: ${clarityId || '(未設定)'}`);
   await fs.rm(distDir, { recursive: true, force: true });
   const copied = await copyPublicFiles(ROOT, distDir);
   log.log(`1. 公開ファイルをコピー: ${copied.length}個`);

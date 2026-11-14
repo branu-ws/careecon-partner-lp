@@ -22,3 +22,22 @@ export function injectGa(html, id) {
   if (html.includes('googletagmanager.com/gtag/js')) return html;
   return html.replace('</head>', `<!-- Google Analytics -->\n${tag}\n</head>`);
 }
+
+/** Microsoft Clarity のプロジェクトID（英小文字と数字のみ）として正しい形か */
+export function isValidClarityId(id) {
+  return /^[a-z0-9]{6,16}$/.test(String(id ?? ''));
+}
+
+/** Microsoft Clarity のタグ。プロジェクトIDが未設定・不正なら空文字 */
+export function clarityTag(id) {
+  if (!isValidClarityId(id)) return '';
+  return `<script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${id}");</script>`;
+}
+
+/** <head> の末尾に Clarity を差し込む（すでに入っているものは重複させない） */
+export function injectClarity(html, id) {
+  const tag = clarityTag(id);
+  if (!tag) return html;
+  if (html.includes('clarity.ms/tag/')) return html;
+  return html.replace('</head>', `<!-- Microsoft Clarity -->\n${tag}\n</head>`);
+}
