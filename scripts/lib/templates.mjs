@@ -2,7 +2,7 @@
 import { extractArticleFaq } from './seo.mjs';
 import { GROUP_ORDER, groupAnchor } from './linking.mjs';
 import { esc, jaDate, jsonForScript, truncate, ymdJst } from './util.mjs';
-import { gaTag, JUICER_TAG } from './tracking.mjs';
+import { gaTag, clarityTag, JUICER_TAG } from './tracking.mjs';
 
 export const SITE_NAME = 'CAREECON Plus 販売パートナープログラム';
 // プライバシーポリシー（全ページ・フォーム共通。固定ページ content/pages/privacy.md から /privacy/ に生成される）
@@ -85,6 +85,7 @@ ${ld}
 ${extraCss.map((f) => `<link rel="stylesheet" href="${rootRel}assets/css/${f}">`).join('\n')}
 ${JUICER_TAG}
 ${gaTag(site.gaId)}
+${clarityTag(site.clarityId)}
 ${TOP_SCRIPT}
 </head>
 <body class="${bodyClass}">

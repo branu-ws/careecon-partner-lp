@@ -33,6 +33,7 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL }}
           GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID || 'G-09WE1G90CT' }}
+          CLARITY_PROJECT_ID: ${{ vars.CLARITY_PROJECT_ID || 'zdczd415n3' }}
       - uses: actions/upload-artifact@v4
         with:
           name: dist

@@ -52,6 +52,7 @@ LPのヘッダー・フッター・ナビを変えるときは、index.html と 
    - `SITE_URL` … 公開URL（https://partner.careecon-plus.com）。canonical・sitemap・RSS に使う
    - `CLOUDFLARE_PAGES_PROJECT` … 1 のプロジェクト名。これで Actions からの公開が有効になる
    - `GA_MEASUREMENT_ID` … 公開後に取得したGA4の測定ID（G-XXXXXXXXXX）。追加したら Actions を手動実行して反映
+   - `CLARITY_PROJECT_ID` … Microsoft Clarity のプロジェクトID。未設定なら既定値（zdczd415n3）が入る。全ページの `<head>` にタグが入る
 5. Cloudflare の Pages プロジェクトの Custom domains に `partner.careecon-plus.com` を追加
 
 ## ローカルでの確認

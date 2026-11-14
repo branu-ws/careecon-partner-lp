@@ -8,7 +8,7 @@ import { createAssetStore, sniffImage } from '../lib/assets.mjs';
 import { firstParagraphText, renderMarkdown } from '../lib/markdown.mjs';
 import { buildLandingJsonLd, buildLlmsTxt, buildRobots, extractFaq } from '../lib/seo.mjs';
 import { buildSitemap } from '../lib/seo.mjs';
-import { gaTag, injectGa, isValidGaId } from '../lib/tracking.mjs';
+import { gaTag, injectGa, isValidGaId, clarityTag, injectClarity, isValidClarityId } from '../lib/tracking.mjs';
 import { esc, safeUrl, toSlug } from '../lib/util.mjs';
 import { buildBlog, buildPages } from '../build.mjs';
 import { thanksPage, webinarPage } from '../lib/templates.mjs';
@@ -43,6 +43,18 @@ test('tracking: GA の形式チェックと差し込み（重複させない）'
   const once = injectGa('<head></head>', 'G-ABC1234567');
   assert.match(once, /gtag\/js\?id=G-ABC1234567/);
   assert.equal(injectGa(once, 'G-ABC1234567'), once);
+});
+
+test('tracking: Clarity の形式チェックと差し込み（重複させない）', () => {
+  assert.ok(isValidClarityId('zdczd415n3'));
+  assert.ok(!isValidClarityId('x"><script>'));
+  assert.ok(!isValidClarityId(''));
+  assert.equal(clarityTag('bad id'), '');
+  const once = injectClarity('<head></head>', 'zdczd415n3');
+  assert.match(once, /www\.clarity\.ms\/tag\//);
+  assert.match(once, /"clarity","script","zdczd415n3"/);
+  assert.equal(injectClarity(once, 'zdczd415n3'), once);
+  assert.equal(injectClarity('<head></head>', ''), '<head></head>');
 });
 
 test('sniffImage: PNG/JPEG/GIF/WebP の寸法を読む', () => {
