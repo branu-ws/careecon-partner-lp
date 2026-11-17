@@ -71,5 +71,6 @@ SITE_URL=https://example.com node scripts/build.mjs   # dist/ に出力
 
 ## オンライン説明会の申込ページ（/webinar/）
 - 内容・日程は `content/webinar.json` で編集（`sessions` を空にすると日程選択なし＝「日程は申込後にメールで案内」）。日程を入れる場合は、Googleフォームの選択肢と `label` を一字一句そろえる
+- 日程に `start`（開始日時。`2026-12-10T14:00:00+09:00` のように日本時間で記載）を入れると、開始時刻を過ぎた日程は自動で非表示になり申込もできなくなる（ビルド時と、ページ表示時の両方で判定）。全日程が過ぎると「日程は申込後にメールで案内」の表示に切り替わる。この場合は、Googleフォーム側の日程の質問を必須にしていないか確認する
 - 送信先は `assets/js/webinar-form.js` の `CONFIG`（説明会専用のGoogleフォームのURLと entry 番号）。資料請求フォーム（form-submit.js）とは別フォームにして回答を分ける。未設定の間は送信ボタンで「準備中」と表示される
 - 送信後は /thanks/ へ移動し、GA4 の generate_lead（form_type=オンライン説明会）が送られる

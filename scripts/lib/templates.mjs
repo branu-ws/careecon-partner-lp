@@ -277,18 +277,22 @@ export function thanksPage({ site, articles = [] }) {
 }
 
 /** オンライン説明会の申込ページ（/webinar/）。content/webinar.json の内容から生成する */
-export function webinarPage({ site, config = {} }) {
+export function webinarPage({ site, config = {}, now = new Date() }) {
   const rootRel = '../';
   const name = config.title || 'CAREECON Plus 販売パートナー オンライン説明会';
   const title = `${name}｜申込フォーム｜${SITE_NAME}`;
   const lead = config.lead || 'CAREECON Plus の販売パートナー制度について、オンラインでご説明します。';
   const description = truncate(`${name}の申込ページです。提携モデルや本部の支援内容、開始までの流れをオンラインでご説明します。加盟金・初期費用不要。`, 120);
-  const sessions = (config.sessions || []).map((s) => String(s.label ?? '').trim()).filter(Boolean);
+  // start（ISO日時・+09:00付き）がある日程は、開始時刻を過ぎたら除く（ビルド時。表示時にも webinar-form.js が同じ判定をする）
+  const sessions = (config.sessions || [])
+    .map((s) => ({ label: String(s.label ?? '').trim(), start: s.start ? String(s.start).trim() : '' }))
+    .filter((s) => s.label && !(Date.parse(s.start) <= now.getTime()));
+  const startAttr = (s) => (Number.isNaN(Date.parse(s.start)) ? '' : ` data-start="${esc(s.start)}"`);
   const agenda = (config.agenda || []).filter((a) => a && a.title);
   const sessionField = sessions.length
-    ? `<div class="field"><label for="wb-session">参加希望日程 <span>必須</span></label><select id="wb-session" name="session" required><option value="" selected disabled>選択してください</option>${sessions.map((s) => `<option value="${esc(s)}">${esc(s)}</option>`).join('')}</select></div>`
+    ? `<div class="field"><label for="wb-session">参加希望日程 <span>必須</span></label><select id="wb-session" name="session" required><option value="" selected disabled>選択してください</option>${sessions.map((s) => `<option value="${esc(s.label)}"${startAttr(s)}>${esc(s.label)}</option>`).join('')}</select></div>`
     : '';
-  const dateHtml = sessions.length ? sessions.map((s) => `<span>${esc(s)}</span>`).join('') : '<span>お申し込み後、担当者よりメールでご案内</span>';
+  const dateHtml = sessions.length ? sessions.map((s) => `<span${startAttr(s)}>${esc(s.label)}</span>`).join('') : '<span>お申し込み後、担当者よりメールでご案内</span>';
   const agendaHtml = agenda.length
     ? `<section class="wb-agenda" aria-labelledby="wb-agenda"><h2 id="wb-agenda"><span>AGENDA</span>説明会の内容</h2><ol>${agenda.map((a) => `<li><b>${esc(a.title)}</b>${a.text ? `<p>${esc(a.text)}</p>` : ''}</li>`).join('')}</ol></section>`
     : '';
@@ -301,7 +305,7 @@ export function webinarPage({ site, config = {} }) {
       <p class="wb-lead">${esc(lead)}</p>
       <dl class="wb-spec">
         <div><dt><small>FORMAT</small>開催形式</dt><dd><span>オンライン</span></dd></div>
-        <div><dt><small>DATE</small>開催日程</dt><dd>${dateHtml}</dd></div>
+        <div><dt><small>DATE</small>開催日程</dt><dd data-wb-dates>${dateHtml}</dd></div>
         ${config.duration ? `<div><dt><small>TIME</small>所要時間</dt><dd><span>${esc(config.duration)}</span></dd></div>` : ''}
         <div><dt><small>FOR</small>対象</dt><dd><span>販売パートナーをご検討の企業様</span></dd></div>
       </dl>
