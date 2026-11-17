@@ -33,12 +33,33 @@
     notReady: '現在フォームの準備中です。恐れ入りますが、しばらくしてからお試しください。',
     required: function (label) { return label + 'を入力してください。'; },
     session: '参加希望日程を選択してください。',
+    sessionClosed: '選択された日程は受付を終了しました。ほかの日程をお選びください。',
     email: 'メールアドレスの形式をご確認ください。',
     phone: '電話番号の形式をご確認ください。',
     consent: 'プライバシーポリシーへの同意が必要です。チェックを入れてください。',
     network: '送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。'
   };
   var LABELS = { company: '会社名', position: '役職', name: 'お名前', email: 'メールアドレス', phone: '電話番号' };
+
+  var CLOSED_TEXT = 'お申し込み後、担当者よりメールでご案内';
+
+  // 開始時刻（data-start）を過ぎた日程を、表示と選択肢から除く。静的ページのため、閲覧時の時刻で判定する
+  function isPast(el) {
+    var t = Date.parse(el.getAttribute('data-start') || '');
+    return !isNaN(t) && t <= Date.now();
+  }
+  function pruneSessions() {
+    var els = document.querySelectorAll('[data-start]');
+    for (var i = 0; i < els.length; i++) if (isPast(els[i])) els[i].parentNode.removeChild(els[i]);
+    var dd = document.querySelector('[data-wb-dates]');
+    if (dd && !dd.querySelector('span')) dd.innerHTML = '<span>' + CLOSED_TEXT + '</span>';
+    var sel = document.getElementById('wb-session');
+    if (sel && !sel.querySelector('option:not([disabled])')) {
+      var field = sel.closest ? sel.closest('.field') : sel.parentNode;
+      field.parentNode.removeChild(field);
+    }
+  }
+  pruneSessions();
 
   function isConfigured(hasSession) {
     if (!/^https:\/\/docs\.google\.com\/forms\/d\/e\/[^/]+\/formResponse/.test(CONFIG.formUrl)) return false;
@@ -104,6 +125,13 @@
     e.preventDefault(); // 入力内容がURLに載るのを防ぐ
     if (form.getAttribute('data-sending') === '1') return;
 
+    var selected = form.elements.session && form.elements.session.selectedOptions && form.elements.session.selectedOptions[0];
+    if (selected && isPast(selected)) {
+      pruneSessions();
+      showError(form, MESSAGES.sessionClosed);
+      return;
+    }
+    pruneSessions();
     var hasSession = !!form.elements.session;
     if (!isConfigured(hasSession)) {
       if (window.console) console.warn('[webinar-form] CONFIG が未設定です。webinar-form.js を編集してください。');

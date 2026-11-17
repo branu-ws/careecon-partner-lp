@@ -275,3 +275,22 @@ test('webinarPage: 独立ページ・同意チェック必須・日程設定の�
   const some = webinarPage({ site, config: { sessions: [{ label: '2026年12月10日（木）14:00〜' }] } });
   assert.match(some, /<select id="wb-session" name="session" required>[\s\S]*2026年12月10日（木）14:00〜/);
 });
+
+test('webinarPage: start を過ぎた日程は表示・選択肢から除かれ、全部過ぎたら日程選択なしになる', () => {
+  const site = { siteUrl: 'https://x.example', gaId: '' };
+  const sessions = [
+    { label: '11月17日（火）18:00〜', start: '2026-11-17T18:00:00+09:00' },
+    { label: '11月20日（金）10:00〜', start: '2026-11-20T10:00:00+09:00' },
+    { label: '日時未設定の日程' },
+  ];
+  const page = webinarPage({ site, config: { sessions }, now: new Date('2026-11-17T18:00:00+09:00') });
+  assert.doesNotMatch(page, /11月17日（火）18:00〜/);
+  assert.match(page, /<option value="11月20日（金）10:00〜" data-start="2026-11-20T10:00:00\+09:00">/);
+  assert.match(page, /<span data-start="2026-11-20T10:00:00\+09:00">11月20日（金）10:00〜<\/span>/);
+  assert.match(page, /日時未設定の日程/);
+  const before = webinarPage({ site, config: { sessions }, now: new Date('2026-11-17T17:59:00+09:00') });
+  assert.match(before, /11月17日（火）18:00〜/);
+  const allPast = webinarPage({ site, config: { sessions: sessions.slice(0, 2) }, now: new Date('2026-12-01T00:00:00+09:00') });
+  assert.doesNotMatch(allPast, /name="session"/);
+  assert.match(allPast, /お申し込み後、担当者よりメールでご案内/);
+});
