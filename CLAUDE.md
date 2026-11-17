@@ -7,6 +7,15 @@
 2. 公開前は `draft: true` で feature ブランチに置く。「公開して」と言われたら `draft` を外し、`date` を**当日の早い時刻**（例 `2026-11-08 00:10`。未来時刻は予約公開になる）にしてから `npm test` と `SKIP_PRERENDER=1 SITE_URL=https://partner.careecon-plus.com node scripts/build.mjs` を通し、PRを作ってマージする。
 3. ビルド時の警告（「要修正」「frontmatter」「内部リンク」）が出ていないか確認する。
 
+## 表記ルール（記事・LP・固定ページのすべてで毎回順守）
+- 製品名: 「CAREECON Plus」「CAREECON Platform」「CAREECON」「BRANU BRAIN」。プロジェクト名: 「BRANU AXIS」（「AXIS」と略さない）。
+- AI機能名: 「AIブログ」「AI日報」「AI報告書」「AI工程表」「AI施工事例」「AIメッセージ」など、正式名称で書く。
+- 建設AXは括弧を付けずに書く。「AI Transformation」の併記は、その記事での初出のみ。
+- 会社名はBRANU（本文は既存記事のルールに従う。参考情報の出典ラベルは「（BRANU株式会社）」）。
+- 数字は半角。不要な読点は入れず、一文を簡潔にする。
+- 製品名の鉤括弧は定義にあたる文で付け、以降は付けなくてよい。ただし記事内で揺れないこと。
+- 記事の追加・リライト・LP変更のたびに、公開前に上記の表記揺れがないか確認する。
+
 ## フロントマターの必須ルール
 - `title` / `seo_title`（できれば全角40字以内。長すぎると検索結果で切れる）/ `summary`（110〜130字。検索語と読者の得を入れる）/ `slug`（半角英数とハイフン）/ `date` / `category`（`パートナー営業` か `建設DX`）/ `tags`。
 - **`group` は必須**。次の5つのどれか（`scripts/lib/linking.mjs` の `GROUP_ORDER` と一致させる）。ブログ一覧の見出しと「あわせて読みたい記事」の選定に使う。未指定は一覧の「その他」に入ってしまう。
