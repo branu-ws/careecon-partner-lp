@@ -7,7 +7,6 @@ slug: accounting-software-vs-cost-management-construction
 category: パートナー営業
 group: 提案の進め方
 tags: [会計ソフト, 原価管理, 建設業, 建設DX, 提案]
-draft: true
 ---
 
 建設業の会計ソフトと原価管理システムの違いは、見る単位が「会社全体」か「工事ごと」か、確認するタイミング、入力する人の3点で整理すると、顧客に説明しやすくなります。
