@@ -7,7 +7,6 @@ slug: electrical-contractor-cost-management-tool
 category: 建設DX
 group: 原価・見積・日報などの業務解説
 tags: [電気工事, 原価管理, 原価管理ツール, 建設DX]
-draft: true
 ---
 
 電気工事会社が原価管理ツールを選ぶときは、機能の数を比べる前に、現場ごとの材料費・外注費・人工を、誰が、いつ入力し、いつ見たいのかを整理すると、自社に合う候補を絞りやすくなります。
