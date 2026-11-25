@@ -39,6 +39,7 @@ export const AUTO_LINK_RULES = [
   ['工程表', 'construction-schedule-chart-basics'],
   ['AI日報', 'construction-daily-report-basics'],
   ['日報', 'construction-daily-report-basics'],
+  ['工事写真管理', 'construction-photo-management-basics'],
   ['見積書', 'construction-estimate-writing'],
   ['粗利率', 'construction-gross-margin-causes'],
   ['外注費', 'construction-outsourcing-cost-management'],
