@@ -7,7 +7,6 @@ slug: construction-cost-reduction-points
 category: 建設DX
 group: 原価・見積・日報などの業務解説
 tags: [コスト削減, 外注費, 原価管理, 建設DX]
-draft: true
 ---
 
 建設業でコストを削減するときは、費用を切る前に、どの工事の、どの費用が増えているのかを見える化することが先です。原因が分からないまま削ると、品質や工期に影響が出ることがあります。

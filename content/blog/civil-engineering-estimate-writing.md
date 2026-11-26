@@ -7,7 +7,6 @@ slug: civil-engineering-estimate-writing
 category: 建設DX
 group: 原価・見積・日報などの業務解説
 tags: [土木工事, 見積書, 積算, 建設DX]
-draft: true
 ---
 
 土木工事の見積書は、工種ごとに数量と単価を積み上げ、現場の費用や諸経費を加えて金額をまとめて作ります。数量の拾い出しと単価の根拠を残しておくと、あとから確認や見直しがしやすくなります。

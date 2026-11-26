@@ -7,7 +7,6 @@ slug: construction-attendance-sheet-basics
 category: 建設DX
 group: 原価・見積・日報などの業務解説
 tags: [出面表, 出面管理, 労務費, 建設DX]
-draft: true
 ---
 
 出面表（でづらひょう）とは、建設現場で、誰が、どの現場に、何日（何時間）働いたかを記録する表です。出面の記録は、人工の把握や労務費の計算、常用の請求の根拠になります。

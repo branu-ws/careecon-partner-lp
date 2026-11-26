@@ -7,7 +7,6 @@ slug: construction-cost-sheet-template
 category: 建設DX
 group: 原価・見積・日報などの業務解説
 tags: [原価管理表, 原価管理, Excel, 建設DX]
-draft: true
 ---
 
 建設業の原価管理表は、工事ごとに、実行予算と実際にかかった原価を並べて確認するための表です。工事の途中で差を見られるようにしておくと、利益が残るかどうかを早めに把握できます。
