@@ -1,8 +1,7 @@
 ---
 title: 販売パートナー募集とは？代理店募集との違いと、応募前に確認したいこと
 seo_title: 販売パートナー募集とは 代理店募集との違いと確認点｜CAREECON Plus
-date: 2026-11-28 12:00
-draft: true
+date: 2026-11-28 00:10
 summary: 販売パートナー募集とは、自社の商品やサービスを顧客に紹介・販売してくれる提携先を募ることです。代理店募集との違い、SaaSでの提携の形、応募前に確認したい5つの点を解説します。
 slug: sales-partner-recruitment-meaning
 category: パートナー営業
